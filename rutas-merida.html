@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rutas a Mérida</title>
+<style>
+:root{--bg:#F2EDE3;--card:#FBF8F1;--line:#E0D8C8;--ink:#3A3129;--sub:#71655A;--faint:#9C8F80;--acc:#587F6B;--accInk:#F6FBF7;--acc2:#8A6F5B;--riesgo:#AE4E2B;--alerta:#9A6A12;--info:#3D6F9E;--okBg:#E4EDE7;--alertaBg:#F5EBD6;--riesgoBg:#F6E3DA;--infoBg:#E4EDF6}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1A1713;--card:#241F1A;--line:#3A322A;--ink:#F0EAE0;--sub:#BCAFA0;--faint:#8D8072;--acc:#8FB89F;--accInk:#17241C;--acc2:#C9A87F;--riesgo:#E0785A;--alerta:#E0B463;--info:#7FA8D8;--okBg:#1E2E24;--alertaBg:#33291A;--riesgoBg:#33211B;--infoBg:#1C2836}}
+:root[data-theme="dark"]{--bg:#1A1713;--card:#241F1A;--line:#3A322A;--ink:#F0EAE0;--sub:#BCAFA0;--faint:#8D8072;--acc:#8FB89F;--accInk:#17241C;--acc2:#C9A87F;--riesgo:#E0785A;--alerta:#E0B463;--info:#7FA8D8;--okBg:#1E2E24;--alertaBg:#33291A;--riesgoBg:#33211B;--infoBg:#1C2836}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1060px;margin:0 auto;padding:28px 16px 48px;display:flex;flex-direction:column;gap:22px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--acc2)}
+h1{font:400 30px/1.2 "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;letter-spacing:-.01em;margin:6px 0 4px;text-wrap:balance}
+h2{font:500 20px/1.3 "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;margin:0 0 8px}
+p{margin:0;color:var(--sub);max-width:70ch}
+.rule{width:60px;height:3px;background:var(--acc2);border-radius:2px;margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:0 1px 2px rgba(58,49,41,.05),0 10px 30px rgba(58,49,41,.07)}
+.wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:14px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+thead th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:600}
+tbody tr:last-child td{border-bottom:none}
+td.total{font-weight:600;color:var(--acc)}
+.chip{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.ok{background:var(--okBg);color:var(--acc)}.alerta{background:var(--alertaBg);color:var(--alerta)}.riesgo{background:var(--riesgoBg);color:var(--riesgo)}.info{background:var(--infoBg);color:var(--info)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.k{font-size:12px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.v{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+ul{margin:6px 0 0;padding-left:18px;color:var(--sub)}li{margin:3px 0}
+.src{font-size:12px;color:var(--faint)}
+code{font:12px ui-monospace,"SF Mono","Cascadia Mono",Consolas,monospace;background:var(--bg);padding:1px 6px;border-radius:6px}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div class="eyebrow">Matriz de ofertas · ofertas puestas en puerto</div>
+  <h1>Rutas a Mérida, lado a lado</h1>
+  <div class="rule"></div>
+  <p>Las ofertas de Kevin del 19-oct puestas en Mobile y Panama City hoy se publican <b>sin destino</b> porque el Master Cost no tiene la ruta puerto → Mérida. Esta página compara, con costos reales de embarques de los últimos 12 meses, las tres formas de llegar a Mérida y qué filas faltan en NetSuite para que el motor las costee solo.</p>
+</header>
+
+<section class="card">
+  <h2>1 · Las cuatro ofertas (2x4 y 2x6 Pino amarillo), costo estimado DDP Mérida por MBF</h2>
+  <div class="wrap"><table>
+    <thead><tr><th>Oferta (precio puesto en)</th><th>Volumen por unidad</th><th>Ruta</th><th>Logística US$/MBF</th><th>DDP Mérida US$/MBF</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td>West Fraser 2x4 #2 · $395 Panama City · 15/10'</td><td>20,880' flat rack</td><td>Flat rack Panama City → Progreso → Kanasín/Mérida</td><td>248</td><td class="total">643</td><td><span class="chip ok">costos reales 2026</span></td></tr>
+      <tr><td>Interfor 2x4 #3 · $405 Panama City · R/L 8'</td><td>~23,000' flat rack (4 camiones)</td><td>Flat rack Panama City → Progreso → Mérida</td><td>225</td><td class="total">630</td><td><span class="chip ok">costos reales 2026</span></td></tr>
+      <tr><td>Canfor 2x4 #2 · $445 Mobile · 5/16'</td><td>11,093' contenedor</td><td>Contenedor Mobile → Progreso → Mérida</td><td>358</td><td class="total">803</td><td><span class="chip alerta">flete marítimo Mobile sin tarifa (usa Savannah $2,000)</span></td></tr>
+      <tr><td>Canfor 2x6 #2 · $300 Mobile · 5/16'</td><td>10,240' contenedor</td><td>Contenedor Mobile → Progreso → Mérida</td><td>388</td><td class="total">688</td><td><span class="chip alerta">idem; el contenedor va a medias (10 MBF)</span></td></tr>
+      <tr><td>Canfor 2x4 #2 · $445 Mobile (si arma furgón)</td><td>60,000' / 92,160' centerbeam</td><td>Railferry Mobile → Coatzacoalcos → camión full a Mérida</td><td>297 / 251</td><td class="total">742 / 696</td><td><span class="chip info">pedir a Kevin si Canfor carga furgón FOB Mobile</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="src" style="margin-top:10px">Tipo de cambio 18.493 (cm_config, 20-oct). Sin margen. Los puertos se parecen entre sí: Progreso conviene con flat rack lleno (20–24 MBF) o contenedor lleno (28 MBF); un contenedor con 10–11 MBF paga la misma logística y duplica el costo por MBF. Railferry solo compite con furgón completo.</p>
+</section>
+
+<section class="grid">
+  <div class="card">
+    <h2>Ruta Progreso · flat rack</h2>
+    <p class="k">Por flat rack (20–24 MBF)</p>
+    <div class="wrap"><table>
+      <tbody>
+        <tr><td>Flete marítimo Línea Peninsular Panama City → Progreso/Kanasín</td><td>3,300</td></tr>
+        <tr><td>Maniobras en puerto Progreso</td><td>965</td></tr>
+        <tr><td>Honorarios agente aduanal</td><td>228</td></tr>
+        <tr><td>Aranceles y Profepa (SYP, T-MEC)</td><td>75</td></tr>
+        <tr><td>Entrega local / handling Mérida</td><td>600</td></tr>
+        <tr><td class="total">Total por flat rack</td><td class="total">5,168</td></tr>
+      </tbody></table></div>
+    <p class="src">POs GF-47604/47605, GF-47345/47346, GF-47157, GF-46923, NT-2600755/756, NT-2600330/331, NT-51329 (oct-2025 a abr-2026).</p>
+  </div>
+  <div class="card">
+    <h2>Ruta Progreso · contenedor 40'</h2>
+    <p class="k">Por contenedor (28 MBF lleno)</p>
+    <div class="wrap"><table>
+      <tbody>
+        <tr><td>Flete marítimo Mobile → Progreso <span class="chip alerta">sin tarifa</span></td><td>2,000*</td></tr>
+        <tr><td>Maniobras en puerto Progreso</td><td>965</td></tr>
+        <tr><td>Honorarios agente aduanal</td><td>232</td></tr>
+        <tr><td>Aranceles y Profepa</td><td>77</td></tr>
+        <tr><td>Camión sencillo Progreso → Mérida/Kanasín</td><td>444</td></tr>
+        <tr><td>Transloading</td><td>250</td></tr>
+        <tr><td class="total">Total por contenedor</td><td class="total">3,968</td></tr>
+      </tbody></table></div>
+    <p class="src">*Savannah → Progreso $2,000 (única tarifa US en cm_ocean). Locales: GF-47545, GF-47197, GF-47253 (2026).</p>
+  </div>
+  <div class="card">
+    <h2>Ruta Coatzacoalcos · Railferry</h2>
+    <p class="k">Por furgón centerbeam (60 MBF · 92 MBF)</p>
+    <div class="wrap"><table>
+      <tbody>
+        <tr><td>Railferry CG Railway Mobile → Coatzacoalcos</td><td>6,500</td></tr>
+        <tr><td>Forwarding fee (Richard Murray)</td><td>150</td></tr>
+        <tr><td>Agente aduanal + aranceles + maniobras frontera</td><td>300</td></tr>
+        <tr><td>Descarga furgón (Almacenadora Sur)</td><td>440</td></tr>
+        <tr><td>Camión full Coatzacoalcos → Mérida, 96,600 MXN c/u × 2 · × 3</td><td>10,448 · 15,672</td></tr>
+        <tr><td class="total">Total por furgón</td><td class="total">17,838 · 23,062</td></tr>
+      </tbody></table></div>
+    <p class="src">Railferry y aduana: NT-51564, NT-2600265, NT-2600469, NT-2600715, GF-47309/47424/47579/48006 (McShan → Chipilo). Camión full 170→121 ya está en cm_truck.</p>
+  </div>
+</section>
+
+<section class="card">
+  <h2>2 · Qué falta en NetSuite para que el motor costee solo (Gerardo)</h2>
+  <div class="wrap"><table>
+    <thead><tr><th>Registro</th><th>Fila</th><th>Valor propuesto</th><th>Fuente</th></tr></thead>
+    <tbody>
+      <tr><td><code>customrecord_ocean_freight</code></td><td>Panama City, FL → Progreso · flat rack · origen US</td><td>3,300 USD</td><td>7 embarques Línea Peninsular 2025-26 (3,250–3,385)</td></tr>
+      <tr><td><code>customrecord_ocean_freight</code></td><td>Mobile, AL → Progreso · 40HC · origen US</td><td>cotizar (hoy no hay)</td><td>Savannah → Progreso $2,000 como referencia</td></tr>
+      <tr><td><code>customrecord_inland_freight_rail</code></td><td>Mobile, AL (354) → Coatzacoalcos (170) · Centerbeam · carrier CG Railway</td><td>6,500 USD</td><td>4 furgones McShan 2025-26 (6,182–7,200)</td></tr>
+      <tr><td><code>customrecord_maniobras</code></td><td>Progreso (79) · contenedor / flat rack</td><td>965 USD</td><td>facturas F-5496…F-6278 del agente aduanal</td></tr>
+      <tr><td><code>customrecord_maniobras</code></td><td>Coatzacoalcos (170) · Centerbeam (descarga Almacenadora Sur)</td><td>440 USD</td><td>GF-47424/47579/48006</td></tr>
+      <tr><td><code>customrecord_import_cost_table</code></td><td>Puerto Progreso (13) · Coatzacoalcos (51)</td><td>ya existen</td><td>38,572 MXN desco. · 4,772 MXN</td></tr>
+      <tr><td><code>customrecord_inland_freight_truck</code></td><td>Coatzacoalcos → Mérida full · Progreso → Mérida sencillo</td><td>96,600 MXN ya existe · falta Progreso→Mérida (444 USD)</td><td>cm_truck · GF-47197</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="card">
+  <h2>3 · Cómo quedaría en la Matriz</h2>
+  <ul>
+    <li><b>Regla (Jorge, 20-oct):</b> oferta puesta en puerto sin ruta en el Master Cost ⇒ se publica <b>sin destino</b>. Así está hoy: las cuatro ofertas son vigentes, con su puerto, y no salen a ningún cliente.</li>
+    <li><b>Con las filas de arriba cargadas en NetSuite</b> (el espejo las trae solo a las 05:17), el motor <code>cotizar</code> necesita dos ramas nuevas: <b>puerto</b> (marítimo + maniobras puerto + importación + camión/local) y <b>Railferry</b> (rail Mobile→Coatza + maniobras + importación Coatza + camión full). Las piernas ya existen como conceptos en el motor; es cablear el árbol para origen = puerto US.</li>
+    <li><b>Comparar lado a lado:</b> para cada oferta en puerto el motor calcula las rutas posibles a Mérida y publica la más barata; el trader ve las demás en «otras opciones» de <code>ofertas_publicadas</code>, como hoy con DDP/DAP.</li>
+    <li><b>Dos datos que solo Kevin sabe:</b> si Canfor puede armar un furgón FOB Mobile para Railferry, y si el contenedor de 11 MBF es flat rack o 40' seco (cambia el flete y lo que cabe).</li>
+  </ul>
+</section>
+</main>
+</body>
+</html>
