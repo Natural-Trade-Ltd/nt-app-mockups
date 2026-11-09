@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guías de la NT App</title>
+<meta name="description" content="Guías paso a paso de la NT App de Natural Trade · Global Forest.">
+<link rel="icon" href="img/nt.png">
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<main class="envoltura">
+  <a class="marca" href="./"><img src="img/nt.png" alt="">Natural Trade · Global Forest</a>
+  <div class="regla"></div>
+  <div class="eyebrow">NT App</div>
+  <h1>Guías paso a paso</h1>
+  <p class="lead">Una guía nueva cada semana, con capturas de la app. También las encuentras en la app, en Herramientas → Guías.</p>
+  <div class="lista" id="lista"><p class="lead">Cargando…</p></div>
+  <p class="pie">Las capturas son de la versión de demostración de la NT App: clientes, contactos y cifras de ejemplo, no reales.</p>
+</main>
+<script>
+(async () => {
+  const caja = document.getElementById('lista');
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const fecha = (d) => { try { return new Date(d + 'T12:00:00').toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (e) { return d; } };
+  try {
+    const r = await fetch('guias.json', { cache: 'no-store' });
+    const j = await r.json();
+    const hoy = new Date().toISOString().slice(0, 10);
+    const guias = (j.guias || []).filter((g) => !g.publicada || g.publicada <= hoy).sort((a, b) => String(b.publicada).localeCompare(String(a.publicada)));
+    caja.innerHTML = guias.map((g, i) => `<a href="${esc(g.url)}"><div class="tarjeta"><span class="num">${guias.length - i}</span><div><h2>${esc(g.titulo)}</h2><p class="sub">${esc(g.resumen)}</p><div class="meta">${g.minutos ? esc(g.minutos) + ' minutos · ' : ''}${esc(fecha(g.publicada))}</div></div></div></a>`).join('') || '<p class="lead">Todavía no hay guías publicadas.</p>';
+  } catch (e) {
+    caja.innerHTML = '<a href="activar-ofertas/"><div class="tarjeta"><span class="num">1</span><div><h2>Activa las ofertas de tu cliente</h2><p class="sub">Las cuatro cosas que necesita un cliente para ver ofertas en vivo.</p></div></div></a>';
+  }
+})();
+</script>
+</body>
+</html>
