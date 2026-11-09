@@ -9,6 +9,15 @@
       "para": "trader",
       "minutos": 5,
       "publicada": "2026-11-09"
+    },
+    {
+      "id": "alta-prospecto",
+      "titulo": "Da de alta un prospecto",
+      "resumen": "Lead en NetSuite, solicitud de crédito y acceso a la app, desde un solo formulario.",
+      "url": "https://natural-trade-ltd.github.io/nt-app-mockups/guias/alta-prospecto/",
+      "para": "trader",
+      "minutos": 4,
+      "publicada": "2026-11-16"
     }
   ]
 }
