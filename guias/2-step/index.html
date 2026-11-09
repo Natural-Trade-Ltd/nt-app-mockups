@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>2-Step Verification · Quick guide</title>
+<style>
+:root{
+  --bg:#F2EDE3; --card:#FBF8F1; --card-2:#F6F1E7; --line:#E0D8C8; --line-strong:#CBBFA9;
+  --ink:#3A3129; --sub:#71655A; --faint:#9C8F80;
+  --acc:#587F6B; --acc-ink:#F6FBF7; --acc2:#8A6F5B;
+  --ok:#587F6B; --ok-bg:#E4EDE7;
+  --alerta:#9A6A12; --alerta-bg:#F5EBD6;
+  --riesgo:#AE4E2B; --riesgo-bg:#F6E3DA;
+  --info:#3D6F9E; --info-bg:#E4EDF6;
+  --rad:16px; --rad-btn:12px; --rad-sm:10px;
+  --shadow:0 1px 2px rgba(58,49,41,.05), 0 10px 30px rgba(58,49,41,.07);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,monospace;
+  --hl:#E8710A;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#1A1713; --card:#241F1A; --card-2:#1F1B16; --line:#3A322A; --line-strong:#4E4238;
+  --ink:#F0EAE0; --sub:#BCAFA0; --faint:#8D8072;
+  --acc:#8FB89F; --acc-ink:#17241C; --acc2:#C9A87F;
+  --ok:#8FB89F; --ok-bg:#1E2E24; --alerta:#E0B463; --alerta-bg:#33291A;
+  --riesgo:#E0785A; --riesgo-bg:#33211B; --info:#7FA8D8; --info-bg:#1C2836;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 14px 34px rgba(0,0,0,.45);
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:780px;margin:0 auto;padding:28px 16px 56px;display:flex;flex-direction:column;gap:22px}
+.logos{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.plate{display:inline-flex;align-items:center;justify-content:center;border-radius:8px}
+.plate img{height:44px;width:auto;display:block}
+@media (prefers-color-scheme:dark){.plate{background:#F7F5EC;padding:5px 8px}}
+.rule{height:3px;width:60px;background:var(--acc2)}
+.eyebrow{font-size:11.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+h1,h2{font-family:var(--serif);font-weight:500;letter-spacing:-.01em;text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,6vw,44px);line-height:1.08}
+h2{font-size:clamp(21px,3.6vw,27px);line-height:1.2}
+p{margin:0;max-width:65ch}
+b,strong{font-weight:600;color:var(--ink)}
+a{color:var(--acc);text-underline-offset:2px}
+.hero{display:flex;flex-direction:column;gap:12px}
+.lead{font-size:17.5px;color:var(--sub)}
+.aviso{background:var(--alerta-bg);border:1px solid var(--line);border-radius:var(--rad);padding:14px 16px}
+.aviso .fecha{font-weight:600;color:var(--alerta)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--rad);padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:16px;min-width:0}
+ul{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+ul li{position:relative;padding-left:20px}
+ul li::before{content:"";position:absolute;left:4px;top:.68em;width:6px;height:6px;border-radius:50%;background:var(--acc2)}
+.pasos{display:flex;flex-direction:column;gap:26px}
+.paso{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}
+.num{width:32px;height:32px;border-radius:999px;background:var(--ok-bg);color:var(--acc);font-weight:600;display:flex;align-items:center;justify-content:center;font-size:15px;font-variant-numeric:tabular-nums}
+.cuerpo{display:flex;flex-direction:column;gap:12px;min-width:0;padding-top:3px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--acc);color:var(--acc-ink);font-weight:600;font-size:15px;border-radius:var(--rad-btn);padding:12px 18px;text-decoration:none;align-self:flex-start}
+.stores{display:flex;gap:10px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;font-size:13.5px;font-weight:500;color:var(--sub);background:var(--card-2);border:1px solid var(--line);border-radius:999px;padding:7px 14px;text-decoration:none}
+.chip:hover{border-color:var(--line-strong);color:var(--ink)}
+.okbox{background:var(--ok-bg);border-radius:var(--rad-sm);padding:12px 14px}
+.nota{color:var(--sub);font-size:15px}
+.tabla{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{text-align:left;vertical-align:top;padding:12px 10px;border-top:1px solid var(--line)}
+th{font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);border-top:0;padding-top:0}
+td:first-child{width:38%;font-weight:500}
+.cita{font-style:italic;color:var(--sub)}
+footer{color:var(--faint);font-size:13.5px;border-top:1px solid var(--line);padding-top:16px;display:flex;flex-direction:column;gap:6px}
+@media (max-width:560px){
+  td:first-child{width:auto}
+  table,thead,tbody,tr,td,th{display:block}
+  thead{display:none}
+  tr{border-top:1px solid var(--line);padding:10px 0}
+  td{border:0;padding:4px 0}
+}
+
+/* ── Pantallas de Google (ilustración) ── */
+.shot{margin:0;display:flex;flex-direction:column;gap:8px;min-width:0}
+.shot figcaption{font-size:13px;color:var(--faint)}
+.win{background:#fff;border:1px solid var(--line-strong);border-radius:12px;overflow:hidden;color:#1f1f1f;
+     font-family:"Google Sans",Roboto,Arial,sans-serif;font-size:14px;line-height:1.45;max-width:560px;box-shadow:var(--shadow)}
+.bar{display:flex;align-items:center;gap:8px;background:#f1f3f4;border-bottom:1px solid #dadce0;padding:7px 10px}
+.dots{display:flex;gap:5px}.dots i{width:9px;height:9px;border-radius:50%;background:#c4c7c5;display:block}
+.url{flex:1;min-width:0;background:#fff;border-radius:999px;padding:3px 12px;font-size:12px;color:#444746;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g{padding:18px 18px 20px;display:flex;flex-direction:column;gap:12px}
+.ghead{display:flex;align-items:center;gap:10px;font-size:18px;color:#1f1f1f}
+.ghead .back{font-size:20px;color:#444746}
+.gsub{color:#444746;font-size:13px}
+.gbtn{display:inline-flex;align-items:center;gap:6px;background:#0b57d0;color:#fff;border-radius:999px;padding:8px 18px;font-size:14px;font-weight:500;align-self:flex-start}
+.gbtn.txt{background:none;color:#0b57d0;padding:8px 10px}
+.gbtn.out{background:#fff;color:#0b57d0;border:1px solid #747775}
+.glist{border:1px solid #dadce0;border-radius:12px;overflow:hidden}
+.grow{display:flex;align-items:center;gap:12px;padding:11px 14px;border-top:1px solid #e9eaec}
+.grow:first-child{border-top:0}
+.gico{width:26px;height:26px;border-radius:50%;background:#e8f0fe;color:#0b57d0;display:flex;align-items:center;justify-content:center;font-size:13px;flex:none}
+.gtxt{flex:1;min-width:0}.gtxt small{display:block;color:#444746;font-size:12px}
+.chev{color:#444746}
+.gsec{font-size:13px;color:#444746;font-weight:500;margin-top:4px}
+.gfield{border:1px solid #747775;border-radius:6px;padding:9px 12px;color:#1f1f1f;background:#fff}
+.gfield label{display:block;font-size:11px;color:#444746;margin-bottom:1px}
+.dialog{border-radius:20px;background:#f8fafd;border:1px solid #dadce0;padding:18px;display:flex;flex-direction:column;gap:12px}
+.dialog h4{margin:0;font-weight:400;font-size:18px}
+.acts{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap}
+.qrrow{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.qr{width:120px;height:120px;background:#fff;padding:6px;border:1px solid #dadce0;border-radius:6px;flex:none}
+.qrtxt{flex:1;min-width:160px;font-size:13px;color:#444746}
+.codes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 16px;font-family:var(--mono);font-size:13px;color:#444746}
+.hl{outline:3px solid var(--hl);outline-offset:3px;border-radius:999px;position:relative}
+.hl.sq{border-radius:12px}
+.estado{display:flex;align-items:center;gap:8px;color:#146c2e;font-size:13px}
+.estado b{color:#146c2e;font-weight:500}
+/* teléfono */
+.phones{display:flex;gap:16px;flex-wrap:wrap}
+.phone{width:200px;border-radius:26px;background:#2b2b2b;padding:8px;box-shadow:var(--shadow)}
+.screen{background:#fff;border-radius:20px;min-height:330px;padding:16px 14px;color:#1f1f1f;font-family:"Google Sans",Roboto,Arial,sans-serif;font-size:13px;display:flex;flex-direction:column;gap:10px;position:relative}
+.apptop{font-size:15px;display:flex;justify-content:space-between;align-items:center}
+.totp{border-top:1px solid #e9eaec;padding-top:10px;display:flex;flex-direction:column;gap:2px}
+.totp small{color:#444746;font-size:11px}
+.totp .n{font-size:28px;color:#0b57d0;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.fab{position:absolute;right:14px;bottom:14px;width:46px;height:46px;border-radius:14px;background:#d3e3fd;color:#0b57d0;font-size:26px;display:flex;align-items:center;justify-content:center}
+.fab.hl{border-radius:14px}
+.menu{position:absolute;right:14px;bottom:70px;background:#f0f4f9;border-radius:12px;padding:6px;display:flex;flex-direction:column;gap:2px;width:170px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.menu div{padding:8px 10px;border-radius:8px;font-size:12.5px}
+.prompt{margin:auto 0;display:flex;flex-direction:column;gap:10px;text-align:center;align-items:center}
+.prompt .q{font-size:17px}
+.prompt .row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.lang{font-size:13.5px;font-weight:500;color:var(--sub);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:7px 14px;text-decoration:none}
+.lang:hover{color:var(--ink);border-color:var(--line-strong)}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <div class="top">
+    <div class="logos">
+      <span class="plate"><img src="../img/nt.png" alt="Natural Trade"></span>
+      <span class="plate"><img src="../img/gf.png" alt="Global Forest"></span>
+    </div>
+    <a class="lang" href="../2-pasos/" lang="es">Ver en español</a>
+  </div>
+
+  <section class="hero">
+    <div class="rule"></div>
+    <div class="eyebrow">Quick guide · company accounts</div>
+    <h1>Turn on 2-Step Verification</h1>
+    <p class="lead">Google will require it on every Natural Trade and Global Forest email account. It takes about 5 minutes.</p>
+  </section>
+
+  <div class="aviso"><span class="fecha">Friday, November 13.</span> From that day on, anyone who has not turned it on will no longer be able to sign in to their email, Drive or Calendar.</div>
+
+  <section class="card">
+    <h2>What you need</h2>
+    <ul>
+      <li>Your computer, signed in to your company email.</li>
+      <li>Your phone.</li>
+      <li>The <b>Google Authenticator</b> app on your phone. It is free.</li>
+    </ul>
+    <div class="stores">
+      <a class="chip" href="https://apps.apple.com/app/google-authenticator/id388497605" target="_blank" rel="noopener">Download for iPhone</a>
+      <a class="chip" href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_blank" rel="noopener">Download for Android</a>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Step by step</h2>
+    <p class="nota">What you click is outlined in orange. The screens are illustrations, and Google's wording may differ slightly.</p>
+
+    <div class="pasos">
+
+      <!-- 1 -->
+      <div class="paso"><div class="num">1</div><div class="cuerpo">
+        <p>On your computer, open the 2-Step Verification page with your company account. If it asks for your password, enter it.</p>
+        <a class="btn" href="https://myaccount.google.com/signinoptions/twosv" target="_blank" rel="noopener">Open 2-Step Verification</a>
+        <figure class="shot">
+          <div class="win">
+            <div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">myaccount.google.com/signinoptions/twosv</div></div>
+            <div class="g">
+              <div class="ghead"><span class="back">←</span>2-Step Verification</div>
+              <div class="gsub">Prevent hackers from accessing your account with an additional layer of security.</div>
+              <div class="gbtn">Turn on 2-Step Verification</div>
+              <div class="gsec">Second steps</div>
+              <div class="glist">
+                <div class="grow"><div class="gico">🔑</div><div class="gtxt">Passkeys and security keys</div><span class="chev">›</span></div>
+                <div class="grow"><div class="gico">📱</div><div class="gtxt">Google prompt</div><span class="chev">›</span></div>
+                <div class="grow"><div class="gico">⌗</div><div class="gtxt">Authenticator</div><span class="chev">›</span></div>
+                <div class="grow"><div class="gico">☎</div><div class="gtxt">Phone number<small>Add a phone number</small></div><span class="chev">›</span></div>
+                <div class="grow"><div class="gico">⋯</div><div class="gtxt">Backup codes</div><span class="chev">›</span></div>
+              </div>
+            </div>
+          </div>
+          <figcaption>The 2-Step Verification page. You do everything else from here.</figcaption>
+        </figure>
+      </div></div>
+
+      <!-- 2 -->
+      <div class="paso"><div class="num">2</div><div class="cuerpo">
+        <p>Click <b>Phone number</b> and add your mobile number. Google texts you a code. Enter it and click <b>Verify</b>.</p>
+        <figure class="shot">
+          <div class="win">
+            <div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">myaccount.google.com/two-step-verification/phone-numbers</div></div>
+            <div class="g">
+              <div class="dialog">
+                <h4>Add a phone number</h4>
+                <div class="gfield"><label>Phone number</label>+1 &nbsp;(604) 555-0142</div>
+                <div class="acts"><span class="gbtn txt">Cancel</span><span class="gbtn hl">Next</span></div>
+              </div>
+              <div class="dialog">
+                <h4>Confirm that this is your number</h4>
+                <div class="gsub">Google sent a text message with a 6-digit code.</div>
+                <div class="gfield"><label>Enter code</label>G- 123456</div>
+                <div class="acts"><span class="gbtn txt">Back</span><span class="gbtn hl">Verify</span></div>
+              </div>
+            </div>
+          </div>
+          <figcaption>First enter your number. Then enter the code you receive by text.</figcaption>
+        </figure>
+      </div></div>
+
+      <!-- 3 -->
+      <div class="paso"><div class="num">3</div><div class="cuerpo">
+        <p>Go back and click <b>Authenticator</b>. Then click <b>Set up authenticator</b>. A QR code appears.</p>
+        <figure class="shot">
+          <div class="win">
+            <div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">myaccount.google.com/two-step-verification/authenticator</div></div>
+            <div class="g">
+              <div class="ghead"><span class="back">←</span>Authenticator app</div>
+              <div class="gsub">Instead of waiting for text messages, get verification codes from an authenticator app.</div>
+              <div class="gbtn out hl">＋ Set up authenticator</div>
+              <div class="dialog">
+                <h4>Set up authenticator app</h4>
+                <div class="qrrow">
+                  <svg class="qr" id="qr" viewBox="0 0 29 29" shape-rendering="crispEdges" aria-label="Sample QR code"></svg>
+                  <div class="qrtxt">In the Google Authenticator app, tap +<br>Choose Scan a QR code</div>
+                </div>
+                <div class="acts"><span class="gbtn txt">Cancel</span><span class="gbtn">Next</span></div>
+              </div>
+            </div>
+          </div>
+          <figcaption>Leave the QR code on your computer screen and pick up your phone. The code in this image is only a sample.</figcaption>
+        </figure>
+      </div></div>
+
+      <!-- 4 -->
+      <div class="paso"><div class="num">4</div><div class="cuerpo">
+        <p>On your phone, open Google Authenticator, tap <b>+</b> and choose <b>Scan a QR code</b>. Point the camera at the code on your computer.</p>
+        <figure class="shot">
+          <div class="phones">
+            <div class="phone"><div class="screen">
+              <div class="apptop"><span>Google Authenticator</span><span>⋮</span></div>
+              <div class="gsub" style="font-size:12px">Tap + to add your account.</div>
+              <div class="menu">
+                <div class="hl sq" style="border-radius:8px">📷 Scan a QR code</div>
+                <div>⌨ Enter a setup key</div>
+              </div>
+              <div class="fab hl">＋</div>
+            </div></div>
+            <div class="phone"><div class="screen">
+              <div class="apptop"><span>Google Authenticator</span><span>⋮</span></div>
+              <div class="totp">
+                <small>Google · name@company.com</small>
+                <span class="n">482 913</span>
+                <small>Changes every 30 seconds</small>
+              </div>
+            </div></div>
+          </div>
+          <figcaption>Left: the + button and the scan option. Right: what your code looks like once the account is added.</figcaption>
+        </figure>
+      </div></div>
+
+      <!-- 5 -->
+      <div class="paso"><div class="num">5</div><div class="cuerpo">
+        <p>On your computer, click <b>Next</b>, enter the 6-digit code shown on your phone and click <b>Verify</b>.</p>
+        <figure class="shot">
+          <div class="win">
+            <div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">myaccount.google.com/two-step-verification/authenticator</div></div>
+            <div class="g">
+              <div class="dialog">
+                <h4>Set up authenticator app</h4>
+                <div class="gsub">Enter the 6-digit code you see in the app.</div>
+                <div class="gfield"><label>Enter code</label>482913</div>
+                <div class="acts"><span class="gbtn txt">Back</span><span class="gbtn hl">Verify</span></div>
+              </div>
+            </div>
+          </div>
+          <figcaption>Enter the code before it changes. If it changes, enter the new one.</figcaption>
+        </figure>
+      </div></div>
+
+      <!-- 6 -->
+      <div class="paso"><div class="num">6</div><div class="cuerpo">
+        <p>Go back to the main page and click <b>Turn on 2-Step Verification</b>. The page should say it is on.</p>
+        <figure class="shot">
+          <div class="win">
+            <div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">myaccount.google.com/signinoptions/twosv</div></div>
+            <div class="g">
+              <div class="ghead"><span class="back">←</span>2-Step Verification</div>
+              <div class="gbtn hl">Turn on 2-Step Verification</div>
+              <div class="glist">
+                <div class="grow"><div class="gico">⌗</div><div class="gtxt">Authenticator<small>Added just now</small></div><span class="chev">›</span></div>
+                <div class="grow"><div class="gico">☎</div><div class="gtxt">Phone number<small>(604) •••-0142</small></div><span class="chev">›</span></div>
+              </div>
+              <div class="gsec">After you click, this appears at the top:</div>
+              <div class="estado">✔ <b>2-Step Verification is on</b></div>
+            </div>
+          </div>
+          <figcaption>When you are done, you should see the message in green.</figcaption>
+        </figure>
+      </div></div>
+
+      <!-- 7 -->
+      <div class="paso"><div class="num">7</div><div class="cuerpo">
+        <p>Click <b>Backup codes</b> and then <b>Get backup codes</b>. Print them or keep them somewhere safe outside your email. Each code works once if you lose your phone.</p>
+        <figure class="shot">
+          <div class="win">
+            <div class="bar"><div class="dots"><i></i><i></i><i></i></div><div class="url">myaccount.google.com/two-step-verification/backup-codes</div></div>
+            <div class="g">
+              <div class="ghead"><span class="back">←</span>Backup codes</div>
+              <div class="gsub">Use them when you don't have your phone. Each code can be used only once.</div>
+              <div class="gbtn hl">＋ Get backup codes</div>
+              <div class="codes">
+                <span>•••• ••••</span><span>•••• ••••</span><span>•••• ••••</span><span>•••• ••••</span><span>•••• ••••</span>
+                <span>•••• ••••</span><span>•••• ••••</span><span>•••• ••••</span><span>•••• ••••</span><span>•••• ••••</span>
+              </div>
+            </div>
+          </div>
+          <figcaption>Google shows you 10 codes. Don't send them by email or WhatsApp.</figcaption>
+        </figure>
+      </div></div>
+
+    </div>
+    <p class="okbox">Done. If the page already says 2-Step Verification is on, there is nothing else to do.</p>
+  </section>
+
+  <section class="card">
+    <h2>What changes day to day</h2>
+    <ul>
+      <li>On your usual computer, Google asks for the code only the first time. Check <b>Don't ask again on this device</b>.</li>
+      <li>On a new computer or phone, Google asks for your password and then the Authenticator code or a prompt on your phone.</li>
+      <li>Some email apps, such as Outlook or iPhone Mail, may ask you to sign in again. Choose <b>Sign in with Google</b> and follow the steps.</li>
+    </ul>
+    <figure class="shot">
+      <div class="phones">
+        <div class="phone"><div class="screen">
+          <div class="prompt">
+            <span style="font-size:13px;color:#444746">Google</span>
+            <span class="q">Trying to sign in?</span>
+            <span class="gsub">Windows · Chrome<br>Vancouver, BC</span>
+            <div class="row"><span class="gbtn out">No, it's not me</span><span class="gbtn hl">Yes</span></div>
+          </div>
+        </div></div>
+      </div>
+      <figcaption>If your email is open on your phone, Google sometimes sends this prompt instead of a code. Tap Yes only if it is you.</figcaption>
+    </figure>
+  </section>
+
+  <section class="card">
+    <h2>Common problems</h2>
+    <div class="tabla">
+      <table>
+        <thead><tr><th>Problem</th><th>What to do</th></tr></thead>
+        <tbody>
+          <tr><td>You see <span class="cita">"You can't sign in. Your sign-in settings don't meet your organization's 2-Step Verification policy"</span></td><td>You didn't turn it on in time, or text message is your only second step. Contact IT so they can help you sign in and add Google Authenticator.</td></tr>
+          <tr><td>I changed or lost my phone</td><td>Sign in with one of your backup codes and set up Authenticator again on the new phone. If you have no codes, contact IT.</td></tr>
+          <tr><td>The text message doesn't arrive</td><td>Use the Google Authenticator code. That is why it helps to have both methods.</td></tr>
+          <tr><td>The Authenticator code doesn't work</td><td>Make sure your phone's time is set automatically, and enter the code before it changes.</td></tr>
+          <tr><td>Outlook or my email app keeps asking for my password</td><td>Remove the account from the app and add it again with <b>Sign in with Google</b>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="nota">No one at the company will ever ask for your codes or your password. If someone asks, don't share them and contact IT.</p>
+  </section>
+
+  <footer>
+    <span>Questions or locked out: contact Jorge (IT).</span>
+    <span>Natural Trade · Global Forest · November 2026</span>
+  </footer>
+
+</main>
+<script>
+/* Sample QR code (not scannable) */
+(function(){
+  var s=document.getElementById('qr'); if(!s) return;
+  var n=29, ns='http://www.w3.org/2000/svg', seed=7;
+  function r(){seed=(seed*16807)%2147483647;return seed/2147483647;}
+  function px(x,y){var e=document.createElementNS(ns,'rect');e.setAttribute('x',x);e.setAttribute('y',y);e.setAttribute('width',1);e.setAttribute('height',1);e.setAttribute('fill','#1f1f1f');s.appendChild(e);}
+  function finder(ox,oy){for(var y=0;y<7;y++)for(var x=0;x<7;x++){var b=(x==0||x==6||y==0||y==6)||(x>1&&x<5&&y>1&&y<5);if(b)px(ox+x,oy+y);}}
+  function inF(x,y){return (x<8&&y<8)||(x>n-9&&y<8)||(x<8&&y>n-9);}
+  for(var y=0;y<n;y++)for(var x=0;x<n;x++){if(!inF(x,y)&&r()<.47)px(x,y);}
+  finder(0,0);finder(n-7,0);finder(0,n-7);
+})();
+</script>
+</body>
+</html>
