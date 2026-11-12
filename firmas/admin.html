@@ -48,8 +48,14 @@ main{padding-block:24px 56px;display:grid;gap:18px;grid-template-columns:minmax(
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .btn[disabled]{opacity:.5;cursor:wait}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px;min-width:0;display:grid;gap:12px;align-content:start}
-.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-@media (max-width:960px){.grid3{grid-template-columns:minmax(0,1fr)}}
+.grid3{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+@media (max-width:1180px){.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.grid3{grid-template-columns:minmax(0,1fr)}}
+.campo{background:var(--field);border:1px solid transparent;border-radius:10px;padding:5px 8px;width:100%;min-width:0;font:inherit;color:inherit}
+.campo:hover{border-color:var(--line)} .campo:focus{border-color:var(--acc)}
+.campo.vacio{border-color:var(--riesgo);background:var(--riesgoBg)}
+.campo.ok{border-color:var(--acc)}
+.check{width:16px;height:16px;accent-color:var(--acc);cursor:pointer}
 .muted{color:var(--sub)}
 .small{font-size:12.5px}
 .chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -114,6 +120,12 @@ tr:last-child td{border-bottom:0}
         <div id="r-importar" hidden></div>
       </div>
       <div class="card">
+        <h3>Firmas de hoy (WiseStamp)</h3>
+        <p class="small muted">Lee la firma que cada persona tiene hoy en Gmail y toma el puesto de quien no lo tiene. Solo lee Gmail.</p>
+        <div><button class="btn" data-accion="leer_firmas" type="button">Leer firmas actuales</button></div>
+        <div id="r-leer_firmas" hidden></div>
+      </div>
+      <div class="card">
         <h3>Antes de encender</h3>
         <p class="small muted">Muestra qué firmas se escribirían y cuáles se detienen por datos faltantes. No toca Gmail.</p>
         <div><button class="btn ghost" data-accion="revisar" type="button">Ver qué cambiaría</button></div>
@@ -121,9 +133,9 @@ tr:last-child td{border-bottom:0}
       </div>
     </div>
     <div class="card" style="padding:0;overflow:hidden">
-      <div style="padding:16px 20px 0" class="chips"><h3 style="margin-right:auto">Personas</h3><span class="small muted">Una fila por persona. La edición llega en la siguiente versión del panel.</span></div>
+      <div style="padding:16px 20px 0" class="chips"><h3 style="margin-right:auto">Personas</h3><span class="small muted">Una fila por persona. Nombre y puesto se editan aquí: se guardan al salir del campo.</span></div>
       <div class="tablewrap" style="border:0;border-top:1px solid var(--line);border-radius:0;margin-top:12px"><table>
-        <thead><tr><th>Persona</th><th>Puesto</th><th>Marca</th><th>Alias</th><th>Piloto</th><th>En Gmail</th></tr></thead>
+        <thead><tr><th style="width:24%">Persona</th><th style="width:24%">Puesto</th><th>Marca</th><th>Alias</th><th>Firma de hoy</th><th>Piloto</th><th>En Gmail</th></tr></thead>
         <tbody id="personas"></tbody></table></div>
     </div>
     <div class="card"><h3>Actividad</h3><div class="log" id="bitacora"></div></div>
@@ -169,13 +181,15 @@ function pintar(e) {
     const prin = ds.find(d => d.principal) || ds[0];
     const alias = ds.filter(d => !d.principal);
     const enGmail = prin?.sincronizada ? `<span class="chip ok">${fecha(prin.sincronizada)}</span>` : prin?.en_gmail === false ? '<span class="chip alerta">No está como «Enviar como»</span>' : prin?.error ? `<span class="chip riesgo" title="${esc(prin.error)}">Error</span>` : '<span class="small muted">Todavía no</span>';
-    return `<tr><td><div class="nm">${esc(p.nombre) || '<span class="miss">Sin nombre</span>'}</div><div class="em">${esc(p.correo)}</div></td>
-      <td>${p.puesto ? esc(p.puesto) : '<span class="miss">Falta</span>'}</td>
+    const hoy = p.firma_anterior ? `<span class="chip" title="${esc(p.firma_anterior.slice(0, 400))}">Ver</span>` : '<span class="small muted">—</span>';
+    return `<tr><td><input class="campo${p.nombre ? '' : ' vacio'}" data-id="${p.id}" data-k="nombre" value="${esc(p.nombre)}" aria-label="Nombre de ${esc(p.correo)}"><div class="em" style="padding-left:8px">${esc(p.correo)}</div></td>
+      <td><input class="campo${p.puesto ? '' : ' vacio'}" data-id="${p.id}" data-k="puesto" value="${esc(p.puesto)}" placeholder="Falta el puesto" aria-label="Puesto de ${esc(p.nombre || p.correo)}"></td>
       <td>${esc(marca(prin?.marca_id))}</td>
       <td>${alias.length ? `<span class="chip" title="${esc(alias.map(a => a.correo + (a.incluir === false ? ' (apagado)' : '')).join('\n'))}">${alias.length} · ${alias.filter(a => a.incluir !== false).length} activos</span>` : '<span class="small muted">—</span>'}</td>
-      <td>${p.en_piloto ? '<span class="chip ok">Sí</span>' : '<span class="small muted">No</span>'}</td>
+      <td>${hoy}</td>
+      <td><input type="checkbox" class="check" data-id="${p.id}" data-k="en_piloto"${p.en_piloto ? ' checked' : ''} aria-label="Piloto: ${esc(p.nombre || p.correo)}"></td>
       <td>${enGmail}</td></tr>`;
-  }).join('') : `<tr><td colspan="6" class="muted">Todavía no hay personas. Usa «Importar cuentas» cuando la conexión con Google esté lista.</td></tr>`;
+  }).join('') : `<tr><td colspan="7" class="muted">Todavía no hay personas. Usa «Importar cuentas» cuando la conexión con Google esté lista.</td></tr>`;
   $('bitacora').innerHTML = (e.bitacora || []).slice(0, 25).map(b => `<div class="log-i"><time>${fecha(b.t)}</time><span class="dot ${esc(b.tipo)}"></span><span>${esc(b.texto)}${b.actor ? ` <span class="small muted">· ${esc(b.actor)}</span>` : ''}</span></div>`).join('') || '<p class="muted">Sin actividad.</p>';
 }
 
@@ -192,6 +206,8 @@ async function accion(nombre, boton) {
         : lineas([['Directorio', r.directorio], ['Gmail', r.gmail]]);
     } else if (nombre === 'importar') {
       caja.innerHTML = lineas([['Cuentas', r.cuentas], ['Nuevas', r.nuevas], ['Actualizadas', r.actualizadas], ['Bajas', r.bajas], ['Alias nuevos', `${r.alias_nuevos} (entran apagados)`], ['Conflictos', r.conflictos.length ? r.conflictos.join(', ') : 'ninguno']]);
+    } else if (nombre === 'leer_firmas') {
+      caja.innerHTML = lineas([['Leídas', r.leidas], ['Puestos tomados', r.puestos ? `${r.puestos}: ${r.llenados.map(x => x.correo.split('@')[0] + ' → ' + x.puesto).join('; ')}` : '0'], ['Sin firma', r.sin_firma], ['Errores', r.errores.length ? r.errores.slice(0, 3).join(' · ') : 'ninguno']]);
     } else {
       const bloq = r.firmas.filter(f => f.accion === 'bloqueada');
       caja.innerHTML = lineas([['Se escribirían', r.cambiarian], ['Sin cambios', r.sin_cambios], ['Detenidas', `${r.bloqueadas}${bloq.length ? ': ' + [...new Set(bloq.map(f => `${f.persona} (${f.detalle})`))].slice(0, 8).join('; ') : ''}`]]);
@@ -203,6 +219,20 @@ async function accion(nombre, boton) {
 }
 
 document.addEventListener('click', e => { const b = e.target.closest('[data-accion]'); if (b) accion(b.dataset.accion, b); });
+document.addEventListener('change', async e => {
+  const el = e.target; if (!el.dataset?.id || !el.dataset.k) return;
+  const k = el.dataset.k, v = el.type === 'checkbox' ? el.checked : el.value.trim();
+  if (k === 'nombre' && !v) { el.classList.add('vacio'); return; }
+  el.disabled = true;
+  try {
+    await app.llamar('firmas-admin', { accion: 'guardar', tipo: 'persona', id: el.dataset.id, campos: { [k]: v } });
+    const p = estado.personas.find(x => x.id === el.dataset.id); if (p) p[k] = v;
+    el.classList.remove('vacio'); if (el.type !== 'checkbox') { el.classList.add('ok'); setTimeout(() => el.classList.remove('ok'), 1200); }
+    if (k === 'en_piloto') pintar(estado);
+  } catch (err) { alertaFila(el, err.message); }
+  finally { el.disabled = false; }
+});
+function alertaFila(el, msg) { el.classList.add('vacio'); el.title = msg; }
 $('entrar').addEventListener('click', async () => {
   if (!sb) { $('login-err').hidden = false; $('login-err').textContent = 'No se pudo cargar el inicio de sesión. Recarga la página.'; return; }
   const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + location.pathname, queryParams: { prompt: 'select_account' } } });

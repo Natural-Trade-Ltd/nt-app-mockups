@@ -179,10 +179,11 @@ function mostrar(d, conservarBorrador) {
   $('hola').textContent = 'Hola, ' + ((d.persona.nombre || '').split(' ')[0] || 'bienvenido');
   const lock = (t, v) => `<div class="locked"><div style="min-width:0"><div class="lbl">${t}</div><div class="v">${v}</div></div><span class="why">${LOCK} Lo cambia Administración</span></div>`;
   $('bloqueados').innerHTML = lock('Nombre', esc(d.persona.nombre) || '<span style="color:var(--riesgo)">Falta</span>')
-    + lock('Puesto', esc(d.persona.puesto) || '<span style="color:var(--riesgo)">Falta. Ya le avisamos a Administración.</span>')
+    + (d.editables.includes('puesto') ? '' : lock('Puesto', esc(d.persona.puesto) || '<span style="color:var(--riesgo)">Falta. Ya le avisamos a Administración.</span>'))
     + lock(d.firmas.length > 1 ? 'Tus correos' : 'Tu correo', d.firmas.map(f => `${esc(f.correo)} <span class="small muted">· ${esc(f.marca)}</span>`).join('<br>') || esc(d.persona.correo));
   const E = d.editables, b = borrador, h = [];
   const inp = (k, label, ph, tipo = 'text', full = false) => `<div class="field${full ? ' full' : ''}"><label for="f-${k}">${label}</label><input id="f-${k}" data-k="${k}" type="${tipo}" value="${esc(b[k])}" placeholder="${esc(ph)}" autocomplete="off"></div>`;
+  if (E.includes('puesto')) h.push(inp('puesto', b.puesto ? 'Puesto' : 'Puesto (falta: sin él tu firma no se publica)', 'Ej. Trader', 'text', true));
   if (E.includes('celular')) h.push(inp('celular', 'Celular', '(000) 000 0000'));
   if (E.includes('extension')) h.push(inp('extension', 'Extensión', 'Ej. 1009'));
   if (E.includes('linkedin')) h.push(inp('linkedin', 'Tu LinkedIn (opcional)', 'https://www.linkedin.com/in/tu-nombre', 'url', true));
