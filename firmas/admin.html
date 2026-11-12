@@ -6,11 +6,11 @@
 <meta name="robots" content="noindex">
 <title>Firmas · Administración</title>
 <style>
-/* Dueto Tierra · panel de Administración: acciones arriba, una fila por persona abajo */
+/* Dueto Tierra · panel: interruptor y envío arriba, acciones, y una fila por persona con sus direcciones */
 :root{
   --bg:#F2EDE3; --card:#FBF8F1; --line:#E0D8C8; --ink:#3A3129; --sub:#71655A; --faint:#9C8F80;
   --acc:#587F6B; --accInk:#F6FBF7; --acc2:#8A6F5B; --riesgo:#AE4E2B; --alerta:#9A6A12; --info:#3D6F9E;
-  --okBg:#E4EDE7; --alertaBg:#F5EBD6; --riesgoBg:#F6E3DA; --infoBg:#E4EDF6; --field:#FFFDF8; --hover:#F5F0E6; --plate:#FFFFFF;
+  --okBg:#E4EDE7; --alertaBg:#F5EBD6; --riesgoBg:#F6E3DA; --infoBg:#E4EDF6; --field:#FFFDF8; --hover:#F5F0E6; --plate:#FFFFFF; --mail:#FFFFFF;
   --shadow:0 1px 2px rgba(58,49,41,.05),0 10px 30px rgba(58,49,41,.07);
   --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
@@ -28,9 +28,9 @@
 html,body{margin:0}
 body{background:var(--bg);color:var(--ink);font:14px/1.55 var(--sans);padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
 img{max-width:100%}
-button{font:inherit;color:inherit}
+button,input,select{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 header{background:var(--card);border-bottom:1px solid var(--line)}
 .top{display:flex;align-items:center;gap:12px 20px;flex-wrap:wrap;padding-block:14px}
 .plate{background:var(--plate);border-radius:8px;padding:4px;display:inline-flex}
@@ -46,34 +46,48 @@ main{padding-block:24px 56px;display:grid;gap:18px;grid-template-columns:minmax(
 .btn{border:0;background:var(--acc);color:var(--accInk);font-weight:600;border-radius:12px;padding:10px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;line-height:1.2}
 .btn:hover{filter:brightness(1.06)}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.sm{padding:5px 10px;font-size:12.5px;border-radius:10px}
+.btn.peligro{background:var(--riesgo);color:#fff}
 .btn[disabled]{opacity:.5;cursor:wait}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px;min-width:0;display:grid;gap:12px;align-content:start}
-.grid3{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
-@media (max-width:1180px){.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:640px){.grid3{grid-template-columns:minmax(0,1fr)}}
-.campo{background:var(--field);border:1px solid transparent;border-radius:10px;padding:5px 8px;width:100%;min-width:0;font:inherit;color:inherit}
-.campo:hover{border-color:var(--line)} .campo:focus{border-color:var(--acc)}
-.campo.vacio{border-color:var(--riesgo);background:var(--riesgoBg)}
-.campo.ok{border-color:var(--acc)}
-.check{width:16px;height:16px;accent-color:var(--acc);cursor:pointer}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+@media (max-width:1180px){.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.grid4{grid-template-columns:minmax(0,1fr)}}
 .muted{color:var(--sub)}
 .small{font-size:12.5px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:500;background:var(--hover);color:var(--sub);line-height:1.6;white-space:nowrap}
 .chip.ok{background:var(--okBg);color:var(--acc)} .chip.alerta{background:var(--alertaBg);color:var(--alerta)} .chip.riesgo{background:var(--riesgoBg);color:var(--riesgo)} .chip.info{background:var(--infoBg);color:var(--info)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:12px;padding:3px;gap:2px;background:var(--field);flex-wrap:wrap}
+.seg button{border:0;background:transparent;border-radius:9px;padding:6px 14px;cursor:pointer;color:var(--sub);font-weight:500}
+.seg button[aria-pressed="true"]{background:var(--okBg);color:var(--ink);font-weight:600}
+.seg button.rojo[aria-pressed="true"]{background:var(--riesgoBg);color:var(--riesgo)}
 .res{border-radius:12px;padding:10px 12px;font-size:13px;background:var(--field);border:1px solid var(--line);display:grid;gap:4px}
-.res .l{display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px}
+.res .l{display:grid;grid-template-columns:120px minmax(0,1fr);gap:8px}
 .res .l b{font-weight:600;color:var(--sub)}
 .res .l span{overflow-wrap:anywhere}
 .err{background:var(--riesgoBg);color:var(--riesgo);border-radius:12px;padding:10px 14px;font-size:13.5px}
-.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--card)}
-table{width:100%;border-collapse:collapse;min-width:760px}
-th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:10px 14px;border-bottom:1px solid var(--line)}
-td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:13.5px}
-tr:last-child td{border-bottom:0}
-.nm{font-weight:600}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:900px}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:13.5px}
+tr.inactiva td{opacity:.55}
+tr.det > td{background:var(--hover);padding:12px 16px}
 .em{font-size:12.5px;color:var(--sub);font-family:var(--mono)}
-.miss{color:var(--riesgo)}
+.campo{background:var(--field);border:1px solid transparent;border-radius:10px;padding:5px 8px;width:100%;min-width:0}
+.campo:hover{border-color:var(--line)} .campo:focus{border-color:var(--acc)}
+.campo.vacio{border-color:var(--riesgo);background:var(--riesgoBg)}
+.campo.ok{border-color:var(--acc)}
+select.campo{width:auto}
+.check{width:16px;height:16px;accent-color:var(--acc);cursor:pointer;vertical-align:middle}
+.dirs{display:grid;gap:6px}
+.dir{display:grid;grid-template-columns:minmax(220px,1.4fr) 110px 120px 90px 90px minmax(160px,1fr) auto;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.dir.piloto{border-color:var(--acc)}
+@media (max-width:980px){.dir{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.dir label{display:flex;gap:6px;align-items:center;font-size:12.5px;cursor:pointer;white-space:nowrap}
+.mail{font-family:var(--mono);font-size:12.5px;overflow-wrap:anywhere}
+.pv{background:var(--mail);color:#202124;border:1px solid var(--line);border-radius:12px;padding:14px;overflow-x:auto}
 .log{display:grid}
 .log-i{display:grid;grid-template-columns:92px 12px minmax(0,1fr);gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
 .log-i:last-child{border-bottom:0}
@@ -83,6 +97,7 @@ tr:last-child td{border-bottom:0}
 .login{max-width:520px;margin:40px auto 0}
 .cargando{display:grid;place-items:center;min-height:40vh;color:var(--sub)}
 .tnum{font-variant-numeric:tabular-nums}
+input[type=search]{background:var(--field);border:1px solid var(--line);border-radius:12px;padding:7px 11px;min-width:0;width:240px;max-width:100%}
 </style>
 </head>
 <body>
@@ -105,39 +120,43 @@ tr:last-child td{border-bottom:0}
   </section>
 
   <section id="v-panel" hidden style="display:grid;gap:18px">
-    <div class="chips" id="resumen"></div>
-    <div class="grid3">
-      <div class="card">
-        <h3>Conexión con Google</h3>
-        <p class="small muted">Revisa que la llave y los dos permisos funcionen. Solo lee: no cambia ninguna firma.</p>
-        <div><button class="btn" data-accion="probar" type="button">Probar conexión</button></div>
-        <div id="r-probar" hidden></div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <div><h3>Sistema</h3><p class="small muted" id="modo-texto"></p></div>
+        <div class="seg" role="group" aria-label="Modo del sistema">
+          <button type="button" data-modo="apagado">Apagado</button>
+          <button type="button" data-modo="piloto">Piloto</button>
+          <button type="button" data-modo="todos" class="rojo">Todos</button>
+        </div>
       </div>
-      <div class="card">
-        <h3>Directorio de Workspace</h3>
-        <p class="small muted">Trae a todas las cuentas con nombre, puesto, celular y alias. No toca Gmail y no pisa lo que ya se capturó a mano. Los alias entran apagados.</p>
-        <div><button class="btn" data-accion="importar" type="button">Importar cuentas</button></div>
-        <div id="r-importar" hidden></div>
+      <div class="row">
+        <button class="btn" data-accion="sincronizar" type="button">Enviar firmas a Gmail</button>
+        <span class="small muted" id="envio-texto"></span>
       </div>
-      <div class="card">
-        <h3>Firmas de hoy (WiseStamp)</h3>
-        <p class="small muted">Lee la firma que cada persona tiene hoy en Gmail y toma el puesto de quien no lo tiene. Solo lee Gmail.</p>
-        <div><button class="btn" data-accion="leer_firmas" type="button">Leer firmas actuales</button></div>
-        <div id="r-leer_firmas" hidden></div>
-      </div>
-      <div class="card">
-        <h3>Antes de encender</h3>
-        <p class="small muted">Muestra qué firmas se escribirían y cuáles se detienen por datos faltantes. No toca Gmail.</p>
-        <div><button class="btn ghost" data-accion="revisar" type="button">Ver qué cambiaría</button></div>
-        <div id="r-revisar" hidden></div>
-      </div>
+      <div id="r-modo" hidden></div>
+      <div id="r-sincronizar" hidden></div>
+      <div class="chips" id="resumen"></div>
     </div>
-    <div class="card" style="padding:0;overflow:hidden">
-      <div style="padding:16px 20px 0" class="chips"><h3 style="margin-right:auto">Personas</h3><span class="small muted">Una fila por persona. Nombre y puesto se editan aquí: se guardan al salir del campo.</span></div>
-      <div class="tablewrap" style="border:0;border-top:1px solid var(--line);border-radius:0;margin-top:12px"><table>
-        <thead><tr><th style="width:24%">Persona</th><th style="width:24%">Puesto</th><th>Marca</th><th>Alias</th><th>Firma de hoy</th><th>Piloto</th><th>En Gmail</th></tr></thead>
+
+    <div class="grid4">
+      <div class="card"><h3>Conexión con Google</h3><p class="small muted">Revisa la llave y los dos permisos. Solo lee.</p><div><button class="btn ghost" data-accion="probar" type="button">Probar conexión</button></div><div id="r-probar" hidden></div></div>
+      <div class="card"><h3>Directorio de Workspace</h3><p class="small muted">Trae cuentas nuevas, puestos y alias. No pisa lo capturado. Los alias entran apagados.</p><div><button class="btn ghost" data-accion="importar" type="button">Importar cuentas</button></div><div id="r-importar" hidden></div></div>
+      <div class="card"><h3>Firmas de hoy (WiseStamp)</h3><p class="small muted">Lee la firma que cada persona tiene hoy en Gmail y toma el puesto si falta. Solo lee.</p><div><button class="btn ghost" data-accion="leer_firmas" type="button">Leer firmas actuales</button></div><div id="r-leer_firmas" hidden></div></div>
+      <div class="card"><h3>Antes de enviar</h3><p class="small muted">Qué firmas cambiarían y cuáles se detienen por datos faltantes. No toca Gmail.</p><div><button class="btn ghost" data-accion="revisar" type="button">Ver qué cambiaría</button></div><div id="r-revisar" hidden></div></div>
+    </div>
+
+    <div class="card" style="padding:0;overflow:hidden;gap:0">
+      <div style="padding:16px 20px" class="row">
+        <h3 style="margin-right:auto">Personas</h3>
+        <input type="search" id="buscar" placeholder="Buscar nombre o correo" aria-label="Buscar persona">
+        <div class="seg" role="group" aria-label="Filtrar"><button type="button" data-filtro="activas" aria-pressed="true">Activas</button><button type="button" data-filtro="inactivas">Inactivas</button><button type="button" data-filtro="piloto">En piloto</button></div>
+      </div>
+      <p class="small muted" style="padding:0 20px 12px">Nombre y puesto se guardan al salir del campo. En «Firmas» eliges qué direcciones llevan firma y cuáles entran al piloto.</p>
+      <div class="tablewrap" style="border-top:1px solid var(--line)"><table>
+        <thead><tr><th style="width:24%">Persona</th><th style="width:22%">Puesto</th><th>Marca</th><th>Firmas</th><th>Firma de hoy</th><th>Activa</th><th>En Gmail</th></tr></thead>
         <tbody id="personas"></tbody></table></div>
     </div>
+
     <div class="card"><h3>Actividad</h3><div class="log" id="bitacora"></div></div>
   </section>
 </main>
@@ -151,8 +170,12 @@ const LLAVE_PUBLICA = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, LLAVE_PUBLICA, { auth: { flowType: 'pkce', persistSession: true, detectSessionInUrl: true } }) : null;
-const MODO = { apagado: ['riesgo', 'Sistema apagado: no escribe en Gmail'], piloto: ['alerta', 'Piloto: solo escribe a las personas del piloto'], todos: ['ok', 'Encendido para todos'] };
-let estado = null;
+const MODO = {
+  apagado: 'Apagado: no se escribe nada en Gmail.',
+  piloto: 'Piloto: solo se escriben las direcciones marcadas como «Piloto».',
+  todos: 'Encendido para todos: se escriben todas las direcciones que llevan firma.',
+};
+let estado = null, filtro = 'activas', abiertos = new Set(), confirmarTodos = false;
 
 const app = window.firmasAdmin = {
   async token() { const { data } = await sb.auth.getSession(); return data.session?.access_token || ''; },
@@ -164,33 +187,79 @@ const app = window.firmasAdmin = {
   },
   pintar,
 };
+const recargar = async () => pintar(await app.llamar('firmas-admin', { accion: 'estado' }));
 
 function vista(n) { for (const v of ['cargando', 'login', 'panel']) $('v-' + v).hidden = v !== n; }
 const fecha = t => t ? new Date(t).toLocaleString('es-MX', { dateStyle: 'medium', timeStyle: 'short' }) : '';
+const marcaNombre = id => estado.marcas.find(m => m.id === id)?.nombre || id || '—';
+const dirsDe = p => estado.direcciones.filter(d => d.persona_id === p.id).sort((a, b) => (b.principal - a.principal) || a.correo.localeCompare(b.correo));
 
 function pintar(e) {
   estado = e; vista('panel'); $('side').hidden = false; $('who').textContent = e.yo || '';
-  const [tipo, txt] = MODO[e.ajustes.modo] || ['', e.ajustes.modo];
+  const modo = e.ajustes.modo;
+  for (const b of document.querySelectorAll('[data-modo]')) b.setAttribute('aria-pressed', b.dataset.modo === modo);
+  $('modo-texto').textContent = MODO[modo] || modo;
   const activas = e.personas.filter(p => p.activa);
-  const dirs = e.direcciones.filter(d => d.incluir !== false);
+  const conFirma = e.direcciones.filter(d => d.incluir !== false && activas.some(p => p.id === d.persona_id));
+  const enPiloto = conFirma.filter(d => d.en_piloto);
   const faltan = activas.filter(p => !p.nombre?.trim() || !p.puesto?.trim()).length;
-  $('resumen').innerHTML = `<span class="chip ${tipo}">${esc(txt)}</span><span class="chip"><b class="tnum">${activas.length}</b>&nbsp;personas activas</span><span class="chip"><b class="tnum">${dirs.length}</b>&nbsp;firmas</span>${faltan ? `<span class="chip alerta">${faltan} sin nombre o puesto</span>` : ''}<span class="chip">${e.personas.filter(p => p.en_piloto).length} en el piloto</span>`;
-  const marca = id => e.marcas.find(m => m.id === id)?.nombre || id;
-  $('personas').innerHTML = activas.length ? activas.map(p => {
-    const ds = e.direcciones.filter(d => d.persona_id === p.id);
-    const prin = ds.find(d => d.principal) || ds[0];
-    const alias = ds.filter(d => !d.principal);
-    const enGmail = prin?.sincronizada ? `<span class="chip ok">${fecha(prin.sincronizada)}</span>` : prin?.en_gmail === false ? '<span class="chip alerta">No está como «Enviar como»</span>' : prin?.error ? `<span class="chip riesgo" title="${esc(prin.error)}">Error</span>` : '<span class="small muted">Todavía no</span>';
-    const hoy = p.firma_anterior ? `<span class="chip" title="${esc(p.firma_anterior.slice(0, 400))}">Ver</span>` : '<span class="small muted">—</span>';
-    return `<tr><td><input class="campo${p.nombre ? '' : ' vacio'}" data-id="${p.id}" data-k="nombre" value="${esc(p.nombre)}" aria-label="Nombre de ${esc(p.correo)}"><div class="em" style="padding-left:8px">${esc(p.correo)}</div></td>
-      <td><input class="campo${p.puesto ? '' : ' vacio'}" data-id="${p.id}" data-k="puesto" value="${esc(p.puesto)}" placeholder="Falta el puesto" aria-label="Puesto de ${esc(p.nombre || p.correo)}"></td>
-      <td>${esc(marca(prin?.marca_id))}</td>
-      <td>${alias.length ? `<span class="chip" title="${esc(alias.map(a => a.correo + (a.incluir === false ? ' (apagado)' : '')).join('\n'))}">${alias.length} · ${alias.filter(a => a.incluir !== false).length} activos</span>` : '<span class="small muted">—</span>'}</td>
-      <td>${hoy}</td>
-      <td><input type="checkbox" class="check" data-id="${p.id}" data-k="en_piloto"${p.en_piloto ? ' checked' : ''} aria-label="Piloto: ${esc(p.nombre || p.correo)}"></td>
-      <td>${enGmail}</td></tr>`;
-  }).join('') : `<tr><td colspan="7" class="muted">Todavía no hay personas. Usa «Importar cuentas» cuando la conexión con Google esté lista.</td></tr>`;
+  $('envio-texto').textContent = modo === 'apagado' ? 'Con el sistema apagado no se envía nada.'
+    : modo === 'piloto' ? `Se enviarán ${enPiloto.length} ${enPiloto.length === 1 ? 'firma' : 'firmas'} del piloto.`
+    : `Se enviarán ${conFirma.length} firmas.`;
+  $('resumen').innerHTML = `<span class="chip"><b class="tnum">${activas.length}</b>&nbsp;personas activas</span><span class="chip"><b class="tnum">${conFirma.length}</b>&nbsp;direcciones con firma</span><span class="chip ${enPiloto.length ? 'ok' : ''}"><b class="tnum">${enPiloto.length}</b>&nbsp;en piloto</span>${faltan ? `<span class="chip alerta">${faltan} sin nombre o puesto</span>` : ''}`;
+  pintarTabla();
   $('bitacora').innerHTML = (e.bitacora || []).slice(0, 25).map(b => `<div class="log-i"><time>${fecha(b.t)}</time><span class="dot ${esc(b.tipo)}"></span><span>${esc(b.texto)}${b.actor ? ` <span class="small muted">· ${esc(b.actor)}</span>` : ''}</span></div>`).join('') || '<p class="muted">Sin actividad.</p>';
+}
+
+function estadoGmail(d) {
+  if (!d) return '<span class="small muted">—</span>';
+  if (d.error && d.en_gmail !== false) return `<span class="chip riesgo" title="${esc(d.error)}">Error</span>`;
+  if (d.en_gmail === false) return '<span class="chip alerta" title="Hay que darlo de alta como «Enviar como» en Gmail">No está como «Enviar como»</span>';
+  if (d.sincronizada) return `<span class="chip ok">${fecha(d.sincronizada)}</span>`;
+  return '<span class="small muted">Todavía no</span>';
+}
+
+function pintarTabla() {
+  const q = ($('buscar').value || '').trim().toLowerCase();
+  const lista = estado.personas.filter(p => {
+    if (filtro === 'activas' && !p.activa) return false;
+    if (filtro === 'inactivas' && p.activa) return false;
+    if (filtro === 'piloto' && !estado.direcciones.some(d => d.persona_id === p.id && d.en_piloto)) return false;
+    return !q || (p.nombre + ' ' + p.correo).toLowerCase().includes(q);
+  });
+  $('personas').innerHTML = lista.length ? lista.map(fila).join('') : `<tr><td colspan="7" class="muted">Nadie coincide.</td></tr>`;
+}
+
+function fila(p) {
+  const ds = dirsDe(p);
+  const prin = ds.find(d => d.principal) || ds[0];
+  const conFirma = ds.filter(d => d.incluir !== false).length;
+  const piloto = ds.filter(d => d.en_piloto).length;
+  const abierto = abiertos.has(p.id);
+  const hoy = p.firma_anterior ? `<span class="chip" title="${esc(p.firma_anterior.slice(0, 400))}">Ver</span>` : '<span class="small muted">—</span>';
+  const principal = `<tr class="${p.activa ? '' : 'inactiva'}">
+    <td><input class="campo${p.nombre ? '' : ' vacio'}" data-p="${p.id}" data-k="nombre" value="${esc(p.nombre)}" aria-label="Nombre de ${esc(p.correo)}"><div class="em" style="padding-left:8px">${esc(p.correo)}</div></td>
+    <td><input class="campo${p.puesto ? '' : ' vacio'}" data-p="${p.id}" data-k="puesto" value="${esc(p.puesto)}" placeholder="Falta el puesto" aria-label="Puesto de ${esc(p.nombre || p.correo)}"></td>
+    <td>${esc(marcaNombre(prin?.marca_id))}</td>
+    <td><button class="btn ghost sm" type="button" data-abrir="${p.id}" aria-expanded="${abierto}">${conFirma} de ${ds.length}${piloto ? ` · <span style="color:var(--acc)">${piloto} piloto</span>` : ''} ${abierto ? '▴' : '▾'}</button></td>
+    <td>${hoy}</td>
+    <td><input type="checkbox" class="check" data-p="${p.id}" data-k="activa"${p.activa ? ' checked' : ''} aria-label="Activa: ${esc(p.nombre || p.correo)}"></td>
+    <td>${estadoGmail(prin)}</td></tr>`;
+  if (!abierto) return principal;
+  const marcasOpt = sel => estado.marcas.map(m => `<option value="${m.id}"${m.id === sel ? ' selected' : ''}>${esc(m.nombre)}</option>`).join('');
+  return principal + `<tr class="det"><td colspan="7"><div class="dirs">
+    ${ds.map(d => `<div class="dir${d.en_piloto ? ' piloto' : ''}">
+      <div><div class="mail">${esc(d.correo)}</div><span class="chip ${d.principal ? 'ok' : ''}" style="margin-top:4px">${d.principal ? 'Principal' : 'Alias'}</span></div>
+      <select class="campo" data-d="${d.id}" data-k="marca_id" aria-label="Marca de ${esc(d.correo)}">${marcasOpt(d.marca_id)}</select>
+      <label><input type="checkbox" class="check" data-d="${d.id}" data-k="incluir"${d.incluir !== false ? ' checked' : ''}> Lleva firma</label>
+      <label><input type="checkbox" class="check" data-d="${d.id}" data-k="en_piloto"${d.en_piloto ? ' checked' : ''}> Piloto</label>
+      <span></span>
+      <div>${estadoGmail(d)}</div>
+      <button class="btn ghost sm" type="button" data-vista="${d.id}">Vista previa</button>
+      <div class="pv" id="pv-${d.id}" hidden style="grid-column:1/-1"></div>
+    </div>`).join('')}
+    <div class="row" style="margin-top:4px"><input class="campo" style="max-width:320px;border-color:var(--line)" id="nuevo-${p.id}" type="email" placeholder="otra.direccion@hauseform.com" aria-label="Agregar dirección"><select class="campo" id="nuevo-m-${p.id}" aria-label="Marca">${marcasOpt(prin?.marca_id)}</select><button class="btn ghost sm" type="button" data-agregar="${p.id}">Agregar dirección</button><span class="small muted">Debe existir como «Enviar como» en su Gmail.</span></div>
+  </div></td></tr>`;
 }
 
 const lineas = pares => `<div class="res">${pares.map(([k, v]) => `<div class="l"><b>${esc(k)}</b><span>${esc(v)}</span></div>`).join('')}</div>`;
@@ -199,40 +268,109 @@ async function accion(nombre, boton) {
   const caja = $('r-' + nombre); boton.disabled = true; const txt = boton.textContent; boton.textContent = 'Trabajando…';
   caja.hidden = false; caja.innerHTML = '';
   try {
-    const r = await app.llamar('firmas-sync', { accion: nombre });
+    const r = await app.llamar('firmas-sync', { accion: nombre, motivo: nombre === 'sincronizar' ? 'Envío desde el panel' : undefined });
     if (nombre === 'probar') {
-      caja.innerHTML = r.llave === false
-        ? '<div class="err">Todavía no está la llave de Google (secreto FIRMAS_GOOGLE_SA).</div>'
-        : lineas([['Directorio', r.directorio], ['Gmail', r.gmail]]);
+      caja.innerHTML = r.llave === false ? '<div class="err">Todavía no está la llave de Google.</div>' : lineas([['Directorio', r.directorio], ['Gmail', r.gmail]]);
     } else if (nombre === 'importar') {
       caja.innerHTML = lineas([['Cuentas', r.cuentas], ['Nuevas', r.nuevas], ['Actualizadas', r.actualizadas], ['Bajas', r.bajas], ['Alias nuevos', `${r.alias_nuevos} (entran apagados)`], ['Conflictos', r.conflictos.length ? r.conflictos.join(', ') : 'ninguno']]);
     } else if (nombre === 'leer_firmas') {
       caja.innerHTML = lineas([['Leídas', r.leidas], ['Puestos tomados', r.puestos ? `${r.puestos}: ${r.llenados.map(x => x.correo.split('@')[0] + ' → ' + x.puesto).join('; ')}` : '0'], ['Sin firma', r.sin_firma], ['Errores', r.errores.length ? r.errores.slice(0, 3).join(' · ') : 'ninguno']]);
     } else {
-      const bloq = r.firmas.filter(f => f.accion === 'bloqueada');
-      caja.innerHTML = lineas([['Se escribirían', r.cambiarian], ['Sin cambios', r.sin_cambios], ['Detenidas', `${r.bloqueadas}${bloq.length ? ': ' + [...new Set(bloq.map(f => `${f.persona} (${f.detalle})`))].slice(0, 8).join('; ') : ''}`]]);
+      const de = a => r.firmas.filter(f => f.accion === a);
+      const lista = a => de(a).map(f => f.correo).slice(0, 6).join(', ');
+      caja.innerHTML = lineas([
+        [nombre === 'revisar' ? 'Cambiarían' : 'Escritas', nombre === 'revisar' ? r.cambiarian : `${r.escritas}${r.escritas ? ': ' + lista('escrita') : ''}`],
+        ['Sin cambios', r.sin_cambios], ['Fuera del modo', r.fuera_de_modo],
+        ['Datos faltantes', r.bloqueadas ? `${r.bloqueadas}: ${[...new Set(de('bloqueada').map(f => f.persona))].slice(0, 6).join(', ')}` : '0'],
+        ['Sin «Enviar como»', r.no_en_gmail ? `${r.no_en_gmail}: ${lista('no_en_gmail')}` : '0'],
+        ['Errores', r.errores ? de('error').map(f => `${f.correo}: ${f.detalle}`).slice(0, 3).join(' · ') : 'ninguno'],
+      ]);
     }
-    pintar(await app.llamar('firmas-admin', { accion: 'estado' }));
-  } catch (e) {
-    caja.innerHTML = `<div class="err">${esc(e.message)}</div>`;
-  } finally { boton.disabled = false; boton.textContent = txt; }
+    await recargar();
+  } catch (e) { caja.innerHTML = `<div class="err">${esc(e.message)}</div>`; }
+  finally { boton.disabled = false; boton.textContent = txt; }
 }
 
-document.addEventListener('click', e => { const b = e.target.closest('[data-accion]'); if (b) accion(b.dataset.accion, b); });
-document.addEventListener('change', async e => {
-  const el = e.target; if (!el.dataset?.id || !el.dataset.k) return;
-  const k = el.dataset.k, v = el.type === 'checkbox' ? el.checked : el.value.trim();
-  if (k === 'nombre' && !v) { el.classList.add('vacio'); return; }
-  el.disabled = true;
+async function guardar(tipo, id, campos, el) {
+  if (el) el.disabled = true;
   try {
-    await app.llamar('firmas-admin', { accion: 'guardar', tipo: 'persona', id: el.dataset.id, campos: { [k]: v } });
-    const p = estado.personas.find(x => x.id === el.dataset.id); if (p) p[k] = v;
-    el.classList.remove('vacio'); if (el.type !== 'checkbox') { el.classList.add('ok'); setTimeout(() => el.classList.remove('ok'), 1200); }
-    if (k === 'en_piloto') pintar(estado);
-  } catch (err) { alertaFila(el, err.message); }
-  finally { el.disabled = false; }
+    await app.llamar('firmas-admin', { accion: 'guardar', tipo, id, campos });
+    const lista = tipo === 'persona' ? estado.personas : estado.direcciones;
+    const x = lista.find(o => o.id === id); if (x) Object.assign(x, campos);
+    if (el && el.type !== 'checkbox' && el.tagName !== 'SELECT') { el.classList.remove('vacio'); el.classList.add('ok'); setTimeout(() => el.classList.remove('ok'), 1200); }
+    return true;
+  } catch (err) { if (el) { el.classList.add('vacio'); el.title = err.message; } alert1(err.message); return false; }
+  finally { if (el) el.disabled = false; }
+}
+function alert1(msg) { const c = $('r-modo'); c.hidden = false; c.innerHTML = `<div class="err">${esc(msg)}</div>`; }
+
+document.addEventListener('click', async e => {
+  const a = e.target.closest('[data-accion]'); if (a) return accion(a.dataset.accion, a);
+  const ab = e.target.closest('[data-abrir]');
+  if (ab) { const id = ab.dataset.abrir; abiertos.has(id) ? abiertos.delete(id) : abiertos.add(id); return pintarTabla(); }
+  const f = e.target.closest('[data-filtro]');
+  if (f) { filtro = f.dataset.filtro; for (const b of f.parentElement.children) b.setAttribute('aria-pressed', b === f); return pintarTabla(); }
+  const m = e.target.closest('[data-modo]');
+  if (m) {
+    const nuevo = m.dataset.modo; if (nuevo === estado.ajustes.modo) return;
+    const c = $('r-modo');
+    if (nuevo === 'todos' && !confirmarTodos) {
+      confirmarTodos = true; c.hidden = false;
+      c.innerHTML = '<div class="err">Esto escribe la firma nueva a todas las direcciones que llevan firma, y reemplaza la de WiseStamp. Vuelve a dar clic en «Todos» para confirmar.</div>';
+      setTimeout(() => { confirmarTodos = false; }, 15000); return;
+    }
+    confirmarTodos = false;
+    try { await app.llamar('firmas-admin', { accion: 'guardar_ajustes', campos: { modo: nuevo } }); c.hidden = true; await recargar(); }
+    catch (err) { alert1(err.message); }
+    return;
+  }
+  const v = e.target.closest('[data-vista]');
+  if (v) {
+    const d = estado.direcciones.find(x => x.id === v.dataset.vista); const p = estado.personas.find(x => x.id === d.persona_id);
+    const caja = $('pv-' + d.id);
+    if (!caja.hidden) { caja.hidden = true; return; }
+    caja.hidden = false; caja.textContent = 'Armando la firma…';
+    try { const r = await app.llamar('firmas-admin', { accion: 'vista_previa', persona: p, direccion: d }); caja.innerHTML = r.html; }
+    catch (err) { caja.innerHTML = `<div class="err">${esc(err.message)}</div>`; }
+    return;
+  }
+  const ag = e.target.closest('[data-agregar]');
+  if (ag) {
+    const pid = ag.dataset.agregar; const correo = $('nuevo-' + pid).value.trim().toLowerCase(); const marca = $('nuevo-m-' + pid).value;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) { alert1('Escribe un correo completo.'); return; }
+    const mk = estado.marcas.find(x => x.id === marca);
+    const ofi = estado.oficinas.filter(o => o.marca_id === marca).slice(0, 1).map(o => o.id);
+    ag.disabled = true;
+    try { await app.llamar('firmas-admin', { accion: 'guardar', tipo: 'direccion', campos: { persona_id: pid, correo, principal: false, incluir: true, marca_id: marca, acompanante: mk?.acompanante || null, orden_logos: 'principal', oficinas: ofi } }); await recargar(); }
+    catch (err) { alert1(err.message); } finally { ag.disabled = false; }
+  }
 });
-function alertaFila(el, msg) { el.classList.add('vacio'); el.title = msg; }
+
+document.addEventListener('change', async e => {
+  const el = e.target;
+  if (el.id === 'buscar') return;
+  if (el.dataset.p && el.dataset.k) {
+    const k = el.dataset.k, v = el.type === 'checkbox' ? el.checked : el.value.trim();
+    if (k === 'nombre' && !v) { el.classList.add('vacio'); return; }
+    if (await guardar('persona', el.dataset.p, { [k]: v }, el) && k === 'activa') pintar(estado);
+    return;
+  }
+  if (el.dataset.d && el.dataset.k) {
+    const d = estado.direcciones.find(x => x.id === el.dataset.d); const k = el.dataset.k;
+    let campos;
+    if (k === 'marca_id') {
+      const mk = estado.marcas.find(x => x.id === el.value);
+      campos = { marca_id: el.value, acompanante: mk?.acompanante && mk.acompanante !== el.value ? mk.acompanante : null, orden_logos: 'principal', oficinas: estado.oficinas.filter(o => o.marca_id === el.value).slice(0, 1).map(o => o.id) };
+    } else if (k === 'en_piloto') {
+      campos = el.checked ? { en_piloto: true, incluir: true } : { en_piloto: false };
+    } else {
+      campos = el.checked ? { incluir: true } : { incluir: false, en_piloto: false };
+    }
+    if (await guardar('direccion', d.id, campos, el)) pintar(estado);
+  }
+});
+$('buscar').addEventListener('input', () => pintarTabla());
+
 $('entrar').addEventListener('click', async () => {
   if (!sb) { $('login-err').hidden = false; $('login-err').textContent = 'No se pudo cargar el inicio de sesión. Recarga la página.'; return; }
   const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + location.pathname, queryParams: { prompt: 'select_account' } } });
@@ -244,7 +382,7 @@ async function arrancar() {
   if (!sb) { vista('login'); return; }
   const { data } = await sb.auth.getSession();
   if (!data.session) { vista('login'); return; }
-  try { pintar(await app.llamar('firmas-admin', { accion: 'estado' })); }
+  try { await recargar(); }
   catch (e) { vista('login'); $('login-err').hidden = false; $('login-err').textContent = e.message; if (e.estado === 401) await sb.auth.signOut(); }
 }
 if (sb) sb.auth.onAuthStateChange(ev => { if (ev === 'SIGNED_IN' && !estado) arrancar(); });
