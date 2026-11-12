@@ -82,9 +82,16 @@ tr.det > td{background:var(--hover);padding:12px 16px}
 select.campo{width:auto}
 .check{width:16px;height:16px;accent-color:var(--acc);cursor:pointer;vertical-align:middle}
 .dirs{display:grid;gap:6px}
-.dir{display:grid;grid-template-columns:minmax(220px,1.4fr) 110px 120px 90px 90px minmax(160px,1fr) auto;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
-.dir.piloto{border-color:var(--acc)}
-@media (max-width:980px){.dir{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+.dir{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.dir.piloto{border-color:var(--acc);box-shadow:inset 3px 0 0 var(--acc)}
+.dir .quien{flex:1 1 240px;min-width:0}
+.dir .ctl{display:grid;gap:2px;font-size:11px;color:var(--faint);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.dir .acciones{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-left:auto}
+.dir .ofis{display:flex;gap:10px;flex-wrap:wrap;flex-basis:100%;font-size:12.5px;color:var(--sub)}
+.dir .msg{flex-basis:100%}
+.datos{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px}
+.datos .ctl{display:grid;gap:3px;font-size:11px;color:var(--faint);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.datos .campo{border-color:var(--line)}
 .dir label{display:flex;gap:6px;align-items:center;font-size:12.5px;cursor:pointer;white-space:nowrap}
 .mail{font-family:var(--mono);font-size:12.5px;overflow-wrap:anywhere}
 .pv{background:var(--mail);color:#202124;border:1px solid var(--line);border-radius:12px;padding:14px;overflow-x:auto}
@@ -246,18 +253,38 @@ function fila(p) {
     <td><input type="checkbox" class="check" data-p="${p.id}" data-k="activa"${p.activa ? ' checked' : ''} aria-label="Activa: ${esc(p.nombre || p.correo)}"></td>
     <td>${estadoGmail(prin)}</td></tr>`;
   if (!abierto) return principal;
-  const marcasOpt = sel => estado.marcas.map(m => `<option value="${m.id}"${m.id === sel ? ' selected' : ''}>${esc(m.nombre)}</option>`).join('');
-  return principal + `<tr class="det"><td colspan="7"><div class="dirs">
-    ${ds.map(d => `<div class="dir${d.en_piloto ? ' piloto' : ''}">
-      <div><div class="mail">${esc(d.correo)}</div><span class="chip ${d.principal ? 'ok' : ''}" style="margin-top:4px">${d.principal ? 'Principal' : 'Alias'}</span></div>
-      <select class="campo" data-d="${d.id}" data-k="marca_id" aria-label="Marca de ${esc(d.correo)}">${marcasOpt(d.marca_id)}</select>
+  const marcasOpt = (sel, quitar) => estado.marcas.filter(m => m.id !== quitar).map(m => `<option value="${m.id}"${m.id === sel ? ' selected' : ''}>${esc(m.nombre)}</option>`).join('');
+  const DIS = { clasica: 'Clásica', banda: 'Banda', compacta: 'Compacta' };
+  const campo = (k, etiqueta, ph = '', tipo = 'text') => `<label class="ctl">${etiqueta}<input class="campo" type="${tipo}" data-p="${p.id}" data-k="${k}" value="${esc(p[k] || '')}" placeholder="${esc(ph)}"></label>`;
+  const datos = `<div class="datos">
+      ${campo('telefono', 'Teléfono de oficina', '604 990 6000')}
+      ${campo('celular', 'Celular', '604 000 0000')}
+      ${campo('extension', 'Extensión', '1010')}
+      ${campo('linkedin', 'LinkedIn personal', 'https://www.linkedin.com/in/…', 'url')}
+      <label class="ctl">Diseño<select class="campo" data-p="${p.id}" data-k="diseno">${Object.keys(DIS).map(k => `<option value="${k}"${p.diseno === k ? ' selected' : ''}>${DIS[k]}</option>`).join('')}</select></label>
+      <label class="ctl" style="align-self:end;text-transform:none;letter-spacing:0;font-weight:500;font-size:13px;color:var(--ink);display:flex;gap:6px;align-items:center"><input type="checkbox" class="check" data-p="${p.id}" data-k="mostrar_celular"${p.mostrar_celular !== false ? ' checked' : ''}> Mostrar celular</label>
+    </div>`;
+  const dirHTML = d => {
+    const ofis = estado.oficinas.filter(o => o.marca_id === d.marca_id);
+    const otra = d.acompanante && estado.marcas.find(m => m.id === d.acompanante);
+    return `<div class="dir${d.en_piloto ? ' piloto' : ''}">
+      <div class="quien"><div class="mail">${esc(d.correo)}</div><div class="chips" style="margin-top:4px"><span class="chip ${d.principal ? 'ok' : ''}">${d.principal ? 'Principal' : 'Alias'}</span>${estadoGmail(d)}</div></div>
+      <label class="ctl">Marca<select class="campo" data-d="${d.id}" data-k="marca_id">${marcasOpt(d.marca_id)}</select></label>
+      <label class="ctl">Segundo logo<select class="campo" data-d="${d.id}" data-k="acompanante"><option value="">Ninguno</option>${marcasOpt(d.acompanante, d.marca_id)}</select></label>
+      <label class="ctl">Arriba va<select class="campo" data-d="${d.id}" data-k="orden_logos"${otra ? '' : ' disabled'}><option value="principal"${d.orden_logos !== 'acompanante' ? ' selected' : ''}>${esc(marcaNombre(d.marca_id))}</option>${otra ? `<option value="acompanante"${d.orden_logos === 'acompanante' ? ' selected' : ''}>${esc(otra.nombre)}</option>` : ''}</select></label>
       <label><input type="checkbox" class="check" data-d="${d.id}" data-k="incluir"${d.incluir !== false ? ' checked' : ''}> Lleva firma</label>
       <label><input type="checkbox" class="check" data-d="${d.id}" data-k="en_piloto"${d.en_piloto ? ' checked' : ''}> Piloto</label>
-      <span></span>
-      <div>${estadoGmail(d)}</div>
-      <button class="btn ghost sm" type="button" data-vista="${d.id}">Vista previa</button>
-      <div class="pv" id="pv-${d.id}" hidden style="grid-column:1/-1"></div>
-    </div>`).join('')}
+      <div class="acciones"><button class="btn ghost sm" type="button" data-vista="${d.id}">Vista previa</button><button class="btn sm" type="button" data-enviar="${d.id}">Enviar esta firma</button></div>
+      <div class="ofis">${ofis.length ? 'Dirección en la firma: ' + ofis.map(o => `<label><input type="checkbox" class="check" data-d="${d.id}" data-ofi="${o.id}"${(d.oficinas || []).includes(o.id) ? ' checked' : ''}> ${esc(o.etiqueta)} · ${esc(o.texto)}</label>`).join('') : 'Esta marca no tiene direcciones de oficina capturadas.'}</div>
+      <div class="msg" id="msg-${d.id}" hidden></div>
+      <div class="pv" id="pv-${d.id}" hidden style="flex-basis:100%"></div>
+    </div>`;
+  };
+  return principal + `<tr class="det"><td colspan="7"><div class="dirs">
+    <div class="small muted" style="font-weight:600">Datos de la firma de ${esc(p.nombre || p.correo)}</div>
+    ${datos}
+    <div class="small muted" style="font-weight:600">Direcciones</div>
+    ${ds.map(dirHTML).join('')}
     <div class="row" style="margin-top:4px"><input class="campo" style="max-width:320px;border-color:var(--line)" id="nuevo-${p.id}" type="email" placeholder="otra.direccion@hauseform.com" aria-label="Agregar dirección"><select class="campo" id="nuevo-m-${p.id}" aria-label="Marca">${marcasOpt(prin?.marca_id)}</select><button class="btn ghost sm" type="button" data-agregar="${p.id}">Agregar dirección</button><span class="small muted">Debe existir como «Enviar como» en su Gmail.</span></div>
   </div></td></tr>`;
 }
@@ -334,6 +361,28 @@ document.addEventListener('click', async e => {
     catch (err) { caja.innerHTML = `<div class="err">${esc(err.message)}</div>`; }
     return;
   }
+  const en = e.target.closest('[data-enviar]');
+  if (en) {
+    const d = estado.direcciones.find(x => x.id === en.dataset.enviar); const caja = $('msg-' + d.id); caja.hidden = false;
+    const modo = estado.ajustes.modo;
+    if (modo === 'apagado') { caja.innerHTML = '<div class="err">El sistema está apagado. Arriba, en «Sistema», cambia el interruptor a «Piloto» y vuelve a dar clic.</div>'; return; }
+    if (modo === 'piloto' && !d.en_piloto) { caja.innerHTML = '<div class="err">Marca «Piloto» en esta dirección y vuelve a dar clic.</div>'; return; }
+    en.disabled = true; caja.innerHTML = '<div class="res">Enviando…</div>';
+    try {
+      const r = await app.llamar('firmas-sync', { accion: 'sincronizar', personas: [d.persona_id], motivo: 'Envío de una persona desde el panel' });
+      const f = r.firmas.find(x => x.correo === d.correo);
+      const ok = f && (f.accion === 'escrita' || f.accion === 'restaurada' || f.accion === 'sin_cambios');
+      const txt = !f ? 'No se envió.' : f.accion === 'escrita' || f.accion === 'restaurada' ? 'Listo: la firma ya está en Gmail. Redacta un correo y elige esta dirección en «De».'
+        : f.accion === 'sin_cambios' ? 'Ya estaba igual en Gmail; no hubo que cambiar nada.'
+        : f.accion === 'no_en_gmail' ? 'Esta dirección no está como «Enviar como» en su Gmail.'
+        : f.accion === 'bloqueada' || f.accion === 'fuera_de_modo' ? `No se envió: ${f.detalle}.` : `Error: ${f.detalle || ''}`;
+      const html = `<div class="${ok ? 'res' : 'err'}">${esc(txt)}</div>`;
+      await recargar();
+      const c2 = $('msg-' + d.id); if (c2) { c2.hidden = false; c2.innerHTML = html; }
+    } catch (err) { caja.innerHTML = `<div class="err">${esc(err.message)}</div>`; }
+    finally { en.disabled = false; }
+    return;
+  }
   const ag = e.target.closest('[data-agregar]');
   if (ag) {
     const pid = ag.dataset.agregar; const correo = $('nuevo-' + pid).value.trim().toLowerCase(); const marca = $('nuevo-m-' + pid).value;
@@ -355,10 +404,18 @@ document.addEventListener('change', async e => {
     if (await guardar('persona', el.dataset.p, { [k]: v }, el) && k === 'activa') pintar(estado);
     return;
   }
+  if (el.dataset.d && el.dataset.ofi) {
+    const d = estado.direcciones.find(x => x.id === el.dataset.d);
+    const ofis = el.checked ? [...new Set([...(d.oficinas || []), el.dataset.ofi])] : (d.oficinas || []).filter(o => o !== el.dataset.ofi);
+    if (await guardar('direccion', d.id, { oficinas: ofis }, el)) pintar(estado);
+    return;
+  }
   if (el.dataset.d && el.dataset.k) {
     const d = estado.direcciones.find(x => x.id === el.dataset.d); const k = el.dataset.k;
     let campos;
-    if (k === 'marca_id') {
+    if (k === 'acompanante') campos = el.value ? { acompanante: el.value } : { acompanante: null, orden_logos: 'principal' };
+    else if (k === 'orden_logos') campos = { orden_logos: el.value };
+    else if (k === 'marca_id') {
       const mk = estado.marcas.find(x => x.id === el.value);
       campos = { marca_id: el.value, acompanante: mk?.acompanante && mk.acompanante !== el.value ? mk.acompanante : null, orden_logos: 'principal', oficinas: estado.oficinas.filter(o => o.marca_id === el.value).slice(0, 1).map(o => o.id) };
     } else if (k === 'en_piloto') {

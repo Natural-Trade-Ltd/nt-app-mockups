@@ -184,6 +184,7 @@ function mostrar(d, conservarBorrador) {
   const E = d.editables, b = borrador, h = [];
   const inp = (k, label, ph, tipo = 'text', full = false) => `<div class="field${full ? ' full' : ''}"><label for="f-${k}">${label}</label><input id="f-${k}" data-k="${k}" type="${tipo}" value="${esc(b[k])}" placeholder="${esc(ph)}" autocomplete="off"></div>`;
   if (E.includes('puesto')) h.push(inp('puesto', b.puesto ? 'Puesto' : 'Puesto (falta: sin él tu firma no se publica)', 'Ej. Trader', 'text', true));
+  if (E.includes('telefono')) h.push(inp('telefono', 'Teléfono de oficina', '(000) 000 0000'));
   if (E.includes('celular')) h.push(inp('celular', 'Celular', '(000) 000 0000'));
   if (E.includes('extension')) h.push(inp('extension', 'Extensión', 'Ej. 1009'));
   if (E.includes('linkedin')) h.push(inp('linkedin', 'Tu LinkedIn (opcional)', 'https://www.linkedin.com/in/tu-nombre', 'url', true));
