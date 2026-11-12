@@ -69,11 +69,12 @@ main{padding-block:24px 56px;display:grid;gap:18px;grid-template-columns:minmax(
 .res .l span{overflow-wrap:anywhere}
 .err{background:var(--riesgoBg);color:var(--riesgo);border-radius:12px;padding:10px 14px;font-size:13.5px}
 .tablewrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:900px}
-th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:10px 12px;border-bottom:1px solid var(--line)}
-td{padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:13.5px}
-tr.inactiva td{opacity:.55}
-tr.det > td{background:var(--hover);padding:12px 16px}
+.tablewrap > table{width:100%;border-collapse:collapse;min-width:900px}
+.tablewrap > table > thead th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:10px 12px;border-bottom:1px solid var(--line)}
+/* Solo la tabla de personas: la firma de la vista previa (también es tabla) no debe heredar estos estilos */
+#personas > tr > td{padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:13.5px}
+#personas > tr.inactiva > td{opacity:.55}
+#personas > tr.det > td{background:var(--hover);padding:12px 16px}
 .em{font-size:12.5px;color:var(--sub);font-family:var(--mono)}
 .campo{background:var(--field);border:1px solid transparent;border-radius:10px;padding:5px 8px;width:100%;min-width:0}
 .campo:hover{border-color:var(--line)} .campo:focus{border-color:var(--acc)}
