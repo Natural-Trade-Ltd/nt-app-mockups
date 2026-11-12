@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Firmas · Administración</title>
+<style>
+/* Dueto Tierra · panel de Administración: acciones arriba, una fila por persona abajo */
+:root{
+  --bg:#F2EDE3; --card:#FBF8F1; --line:#E0D8C8; --ink:#3A3129; --sub:#71655A; --faint:#9C8F80;
+  --acc:#587F6B; --accInk:#F6FBF7; --acc2:#8A6F5B; --riesgo:#AE4E2B; --alerta:#9A6A12; --info:#3D6F9E;
+  --okBg:#E4EDE7; --alertaBg:#F5EBD6; --riesgoBg:#F6E3DA; --infoBg:#E4EDF6; --field:#FFFDF8; --hover:#F5F0E6; --plate:#FFFFFF;
+  --shadow:0 1px 2px rgba(58,49,41,.05),0 10px 30px rgba(58,49,41,.07);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#1A1713; --card:#241F1A; --line:#3A322A; --ink:#F0EAE0; --sub:#BCAFA0; --faint:#8D8072;
+  --acc:#8FB89F; --accInk:#17241C; --acc2:#C9A87F; --riesgo:#E0785A; --alerta:#E0B463; --info:#7FA8D8;
+  --okBg:#1E2E24; --alertaBg:#33291A; --riesgoBg:#33211B; --infoBg:#1C2836; --field:#1F1B16; --hover:#2B251F;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 14px 34px rgba(0,0,0,.45); color-scheme:dark;
+}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.55 var(--sans);padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+img{max-width:100%}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{background:var(--card);border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;gap:12px 20px;flex-wrap:wrap;padding-block:14px}
+.plate{background:var(--plate);border-radius:8px;padding:4px;display:inline-flex}
+.plate img{height:34px;width:auto;display:block}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--acc2)}
+h1{font:500 26px/1.1 var(--serif);letter-spacing:-.01em;margin:0}
+h2{font:500 22px/1.2 var(--serif);margin:0}
+h3{font-size:15px;font-weight:600;margin:0}
+p{margin:0}
+.side{margin-left:auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.who{font-size:13px;color:var(--sub);font-family:var(--mono)}
+main{padding-block:24px 56px;display:grid;gap:18px;grid-template-columns:minmax(0,1fr)}
+.btn{border:0;background:var(--acc);color:var(--accInk);font-weight:600;border-radius:12px;padding:10px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;line-height:1.2}
+.btn:hover{filter:brightness(1.06)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn[disabled]{opacity:.5;cursor:wait}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px;min-width:0;display:grid;gap:12px;align-content:start}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+@media (max-width:960px){.grid3{grid-template-columns:minmax(0,1fr)}}
+.muted{color:var(--sub)}
+.small{font-size:12.5px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:500;background:var(--hover);color:var(--sub);line-height:1.6;white-space:nowrap}
+.chip.ok{background:var(--okBg);color:var(--acc)} .chip.alerta{background:var(--alertaBg);color:var(--alerta)} .chip.riesgo{background:var(--riesgoBg);color:var(--riesgo)} .chip.info{background:var(--infoBg);color:var(--info)}
+.res{border-radius:12px;padding:10px 12px;font-size:13px;background:var(--field);border:1px solid var(--line);display:grid;gap:4px}
+.res .l{display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px}
+.res .l b{font-weight:600;color:var(--sub)}
+.res .l span{overflow-wrap:anywhere}
+.err{background:var(--riesgoBg);color:var(--riesgo);border-radius:12px;padding:10px 14px;font-size:13.5px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--card)}
+table{width:100%;border-collapse:collapse;min-width:760px}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:10px 14px;border-bottom:1px solid var(--line)}
+td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:middle;font-size:13.5px}
+tr:last-child td{border-bottom:0}
+.nm{font-weight:600}
+.em{font-size:12.5px;color:var(--sub);font-family:var(--mono)}
+.miss{color:var(--riesgo)}
+.log{display:grid}
+.log-i{display:grid;grid-template-columns:92px 12px minmax(0,1fr);gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+.log-i:last-child{border-bottom:0}
+.log-i time{color:var(--faint);font-size:12px;font-variant-numeric:tabular-nums}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--info);display:inline-block}
+.dot.ok{background:var(--acc)} .dot.alerta{background:var(--alerta)} .dot.error{background:var(--riesgo)}
+.login{max-width:520px;margin:40px auto 0}
+.cargando{display:grid;place-items:center;min-height:40vh;color:var(--sub)}
+.tnum{font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap top">
+    <span class="plate"><img src="https://cytopyytymxjwvfhosvg.supabase.co/storage/v1/object/public/firmas/nt-mark.png" alt="Natural Trade"></span>
+    <div><div class="eyebrow">Firmas de correo</div><h1>Administración</h1></div>
+    <div class="side" id="side" hidden><span class="who" id="who"></span><button class="btn ghost" id="salir" type="button">Salir</button></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="v-cargando" class="cargando">Cargando…</div>
+
+  <section id="v-login" class="card login" hidden>
+    <h2>Administración de firmas</h2>
+    <p class="muted">Solo para Administración. Entra con tu cuenta de Google de la empresa.</p>
+    <div><button class="btn" id="entrar" type="button">Continuar con Google</button></div>
+    <div id="login-err" class="err" hidden></div>
+  </section>
+
+  <section id="v-panel" hidden style="display:grid;gap:18px">
+    <div class="chips" id="resumen"></div>
+    <div class="grid3">
+      <div class="card">
+        <h3>Conexión con Google</h3>
+        <p class="small muted">Revisa que la llave y los dos permisos funcionen. Solo lee: no cambia ninguna firma.</p>
+        <div><button class="btn" data-accion="probar" type="button">Probar conexión</button></div>
+        <div id="r-probar" hidden></div>
+      </div>
+      <div class="card">
+        <h3>Directorio de Workspace</h3>
+        <p class="small muted">Trae a todas las cuentas con nombre, puesto, celular y alias. No toca Gmail y no pisa lo que ya se capturó a mano. Los alias entran apagados.</p>
+        <div><button class="btn" data-accion="importar" type="button">Importar cuentas</button></div>
+        <div id="r-importar" hidden></div>
+      </div>
+      <div class="card">
+        <h3>Antes de encender</h3>
+        <p class="small muted">Muestra qué firmas se escribirían y cuáles se detienen por datos faltantes. No toca Gmail.</p>
+        <div><button class="btn ghost" data-accion="revisar" type="button">Ver qué cambiaría</button></div>
+        <div id="r-revisar" hidden></div>
+      </div>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="padding:16px 20px 0" class="chips"><h3 style="margin-right:auto">Personas</h3><span class="small muted">Una fila por persona. La edición llega en la siguiente versión del panel.</span></div>
+      <div class="tablewrap" style="border:0;border-top:1px solid var(--line);border-radius:0;margin-top:12px"><table>
+        <thead><tr><th>Persona</th><th>Puesto</th><th>Marca</th><th>Alias</th><th>Piloto</th><th>En Gmail</th></tr></thead>
+        <tbody id="personas"></tbody></table></div>
+    </div>
+    <div class="card"><h3>Actividad</h3><div class="log" id="bitacora"></div></div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+(() => {
+'use strict';
+const SUPABASE_URL = 'https://cytopyytymxjwvfhosvg.supabase.co';
+const LLAVE_PUBLICA = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5dG9weXl0eW14and2Zmhvc3ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzNDk1NTMsImV4cCI6MjEwMDkyNTU1M30.59i3eWQkBgSd_Dvb9ByzOEYXP-vH4uzFk3N_tICrzr0';
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, LLAVE_PUBLICA, { auth: { flowType: 'pkce', persistSession: true, detectSessionInUrl: true } }) : null;
+const MODO = { apagado: ['riesgo', 'Sistema apagado: no escribe en Gmail'], piloto: ['alerta', 'Piloto: solo escribe a las personas del piloto'], todos: ['ok', 'Encendido para todos'] };
+let estado = null;
+
+const app = window.firmasAdmin = {
+  async token() { const { data } = await sb.auth.getSession(); return data.session?.access_token || ''; },
+  async llamar(funcion, cuerpo) {
+    const r = await fetch(`${SUPABASE_URL}/functions/v1/${funcion}`, { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: LLAVE_PUBLICA, Authorization: 'Bearer ' + await app.token() }, body: JSON.stringify(cuerpo) });
+    const j = await r.json().catch(() => ({ error: 'Respuesta inesperada del servidor.' }));
+    if (!r.ok) { const e = new Error(j.error || 'Algo falló.'); e.estado = r.status; throw e; }
+    return j;
+  },
+  pintar,
+};
+
+function vista(n) { for (const v of ['cargando', 'login', 'panel']) $('v-' + v).hidden = v !== n; }
+const fecha = t => t ? new Date(t).toLocaleString('es-MX', { dateStyle: 'medium', timeStyle: 'short' }) : '';
+
+function pintar(e) {
+  estado = e; vista('panel'); $('side').hidden = false; $('who').textContent = e.yo || '';
+  const [tipo, txt] = MODO[e.ajustes.modo] || ['', e.ajustes.modo];
+  const activas = e.personas.filter(p => p.activa);
+  const dirs = e.direcciones.filter(d => d.incluir !== false);
+  const faltan = activas.filter(p => !p.nombre?.trim() || !p.puesto?.trim()).length;
+  $('resumen').innerHTML = `<span class="chip ${tipo}">${esc(txt)}</span><span class="chip"><b class="tnum">${activas.length}</b>&nbsp;personas activas</span><span class="chip"><b class="tnum">${dirs.length}</b>&nbsp;firmas</span>${faltan ? `<span class="chip alerta">${faltan} sin nombre o puesto</span>` : ''}<span class="chip">${e.personas.filter(p => p.en_piloto).length} en el piloto</span>`;
+  const marca = id => e.marcas.find(m => m.id === id)?.nombre || id;
+  $('personas').innerHTML = activas.length ? activas.map(p => {
+    const ds = e.direcciones.filter(d => d.persona_id === p.id);
+    const prin = ds.find(d => d.principal) || ds[0];
+    const alias = ds.filter(d => !d.principal);
+    const enGmail = prin?.sincronizada ? `<span class="chip ok">${fecha(prin.sincronizada)}</span>` : prin?.en_gmail === false ? '<span class="chip alerta">No está como «Enviar como»</span>' : prin?.error ? `<span class="chip riesgo" title="${esc(prin.error)}">Error</span>` : '<span class="small muted">Todavía no</span>';
+    return `<tr><td><div class="nm">${esc(p.nombre) || '<span class="miss">Sin nombre</span>'}</div><div class="em">${esc(p.correo)}</div></td>
+      <td>${p.puesto ? esc(p.puesto) : '<span class="miss">Falta</span>'}</td>
+      <td>${esc(marca(prin?.marca_id))}</td>
+      <td>${alias.length ? `<span class="chip" title="${esc(alias.map(a => a.correo + (a.incluir === false ? ' (apagado)' : '')).join('\n'))}">${alias.length} · ${alias.filter(a => a.incluir !== false).length} activos</span>` : '<span class="small muted">—</span>'}</td>
+      <td>${p.en_piloto ? '<span class="chip ok">Sí</span>' : '<span class="small muted">No</span>'}</td>
+      <td>${enGmail}</td></tr>`;
+  }).join('') : `<tr><td colspan="6" class="muted">Todavía no hay personas. Usa «Importar cuentas» cuando la conexión con Google esté lista.</td></tr>`;
+  $('bitacora').innerHTML = (e.bitacora || []).slice(0, 25).map(b => `<div class="log-i"><time>${fecha(b.t)}</time><span class="dot ${esc(b.tipo)}"></span><span>${esc(b.texto)}${b.actor ? ` <span class="small muted">· ${esc(b.actor)}</span>` : ''}</span></div>`).join('') || '<p class="muted">Sin actividad.</p>';
+}
+
+const lineas = pares => `<div class="res">${pares.map(([k, v]) => `<div class="l"><b>${esc(k)}</b><span>${esc(v)}</span></div>`).join('')}</div>`;
+
+async function accion(nombre, boton) {
+  const caja = $('r-' + nombre); boton.disabled = true; const txt = boton.textContent; boton.textContent = 'Trabajando…';
+  caja.hidden = false; caja.innerHTML = '';
+  try {
+    const r = await app.llamar('firmas-sync', { accion: nombre });
+    if (nombre === 'probar') {
+      caja.innerHTML = r.llave === false
+        ? '<div class="err">Todavía no está la llave de Google (secreto FIRMAS_GOOGLE_SA).</div>'
+        : lineas([['Directorio', r.directorio], ['Gmail', r.gmail]]);
+    } else if (nombre === 'importar') {
+      caja.innerHTML = lineas([['Cuentas', r.cuentas], ['Nuevas', r.nuevas], ['Actualizadas', r.actualizadas], ['Bajas', r.bajas], ['Alias nuevos', `${r.alias_nuevos} (entran apagados)`], ['Conflictos', r.conflictos.length ? r.conflictos.join(', ') : 'ninguno']]);
+    } else {
+      const bloq = r.firmas.filter(f => f.accion === 'bloqueada');
+      caja.innerHTML = lineas([['Se escribirían', r.cambiarian], ['Sin cambios', r.sin_cambios], ['Detenidas', `${r.bloqueadas}${bloq.length ? ': ' + [...new Set(bloq.map(f => `${f.persona} (${f.detalle})`))].slice(0, 8).join('; ') : ''}`]]);
+    }
+    pintar(await app.llamar('firmas-admin', { accion: 'estado' }));
+  } catch (e) {
+    caja.innerHTML = `<div class="err">${esc(e.message)}</div>`;
+  } finally { boton.disabled = false; boton.textContent = txt; }
+}
+
+document.addEventListener('click', e => { const b = e.target.closest('[data-accion]'); if (b) accion(b.dataset.accion, b); });
+$('entrar').addEventListener('click', async () => {
+  if (!sb) { $('login-err').hidden = false; $('login-err').textContent = 'No se pudo cargar el inicio de sesión. Recarga la página.'; return; }
+  const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + location.pathname, queryParams: { prompt: 'select_account' } } });
+  if (error) { $('login-err').hidden = false; $('login-err').textContent = error.message; }
+});
+$('salir').addEventListener('click', async () => { if (sb) await sb.auth.signOut(); estado = null; $('side').hidden = true; vista('login'); });
+
+async function arrancar() {
+  if (!sb) { vista('login'); return; }
+  const { data } = await sb.auth.getSession();
+  if (!data.session) { vista('login'); return; }
+  try { pintar(await app.llamar('firmas-admin', { accion: 'estado' })); }
+  catch (e) { vista('login'); $('login-err').hidden = false; $('login-err').textContent = e.message; if (e.estado === 401) await sb.auth.signOut(); }
+}
+if (sb) sb.auth.onAuthStateChange(ev => { if (ev === 'SIGNED_IN' && !estado) arrancar(); });
+arrancar();
+})();
+</script>
+</body>
+</html>
