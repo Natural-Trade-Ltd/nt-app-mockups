@@ -146,7 +146,7 @@ input[type=search]{background:var(--field);border:1px solid var(--line);border-r
     </div>
 
     <div class="grid4">
-      <div class="card"><h3>Conexión con Google</h3><p class="small muted">Revisa la llave y los dos permisos. Solo lee.</p><div><button class="btn ghost" data-accion="probar" type="button">Probar conexión</button></div><div id="r-probar" hidden></div></div>
+      <div class="card"><h3>Conexión con Google</h3><p class="small muted">Revisa la llave y los tres permisos. Solo lee.</p><div><button class="btn ghost" data-accion="probar" type="button">Probar conexión</button></div><div id="r-probar" hidden></div></div>
       <div class="card"><h3>Directorio de Workspace</h3><p class="small muted">Trae cuentas nuevas, puestos y alias. No pisa lo capturado. Los alias entran apagados.</p><div><button class="btn ghost" data-accion="importar" type="button">Importar cuentas</button></div><div id="r-importar" hidden></div></div>
       <div class="card"><h3>Firmas de hoy (WiseStamp)</h3><p class="small muted">Lee la firma que cada persona tiene hoy en Gmail y toma el puesto si falta. Solo lee.</p><div><button class="btn ghost" data-accion="leer_firmas" type="button">Leer firmas actuales</button></div><div id="r-leer_firmas" hidden></div></div>
       <div class="card"><h3>Antes de enviar</h3><p class="small muted">Qué firmas cambiarían y cuáles se detienen por datos faltantes. No toca Gmail.</p><div><button class="btn ghost" data-accion="revisar" type="button">Ver qué cambiaría</button></div><div id="r-revisar" hidden></div></div>
@@ -297,7 +297,7 @@ async function accion(nombre, boton) {
   try {
     const r = await app.llamar('firmas-sync', { accion: nombre, motivo: nombre === 'sincronizar' ? 'Envío desde el panel' : undefined });
     if (nombre === 'probar') {
-      caja.innerHTML = r.llave === false ? '<div class="err">Todavía no está la llave de Google.</div>' : lineas([['Directorio', r.directorio], ['Gmail', r.gmail]]);
+      caja.innerHTML = r.llave === false ? '<div class="err">Todavía no está la llave de Google.</div>' : lineas([['Directorio', r.directorio], ['Gmail', r.gmail], ['Firmas de alias', r.alias]]);
     } else if (nombre === 'importar') {
       caja.innerHTML = lineas([['Cuentas', r.cuentas], ['Nuevas', r.nuevas], ['Actualizadas', r.actualizadas], ['Bajas', r.bajas], ['Alias nuevos', `${r.alias_nuevos} (entran apagados)`], ['Conflictos', r.conflictos.length ? r.conflictos.join(', ') : 'ninguno']]);
     } else if (nombre === 'leer_firmas') {
