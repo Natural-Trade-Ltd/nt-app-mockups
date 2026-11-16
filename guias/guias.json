@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-11-09",
+  "actualizado": "2026-11-16",
   "guias": [
     {
       "id": "activar-ofertas",
@@ -12,8 +12,8 @@
     },
     {
       "id": "alta-prospecto",
-      "titulo": "Da de alta un prospecto",
-      "resumen": "Lead en NetSuite, solicitud de crédito y acceso a la app, desde un solo formulario.",
+      "titulo": "Da de alta un cliente nuevo",
+      "resumen": "Paso a paso con capturas: el prospecto en NetSuite, su solicitud de crédito y su acceso a la app, desde un solo formulario.",
       "url": "https://natural-trade-ltd.github.io/nt-app-mockups/guias/alta-prospecto/",
       "para": "trader",
       "minutos": 4,
