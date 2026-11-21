@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lista China</title>
+<style>
+:root{--bg:#F2EDE3;--card:#FBF8F1;--line:#E0D8C8;--ink:#3A3129;--sub:#71655A;--acc:#587F6B;--acc2:#8A6F5B;--riesgo:#AE4E2B;--alerta:#9A6A12;--okBg:#E4EDE7;--riesgoBg:#F6E3DA;--alertaBg:#F5EBD6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1A1713;--card:#241F1A;--line:#3A322A;--ink:#F0EAE0;--sub:#BCAFA0;--acc:#8FB89F;--acc2:#C9A87F;--riesgo:#E0785A;--alerta:#E0B463;--okBg:#1E2E24;--riesgoBg:#33211B;--alertaBg:#33291A}}
+:root[data-theme="dark"]{--bg:#1A1713;--card:#241F1A;--line:#3A322A;--ink:#F0EAE0;--sub:#BCAFA0;--acc:#8FB89F;--acc2:#C9A87F;--riesgo:#E0785A;--alerta:#E0B463;--okBg:#1E2E24;--riesgoBg:#33211B;--alertaBg:#33291A}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.55;padding:32px 16px}
+.card{max-width:560px;margin:40px auto;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 1px 2px rgba(58,49,41,.05),0 10px 30px rgba(58,49,41,.07)}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--sub);margin:0 0 10px}
+h1{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;font-weight:500;font-size:26px;margin:0 0 12px;letter-spacing:-.01em;text-wrap:balance}
+p{margin:0 0 10px}
+.chip{display:inline-block;border-radius:999px;padding:4px 12px;font-size:13px;font-weight:600;margin-bottom:14px}
+.ok{background:var(--okBg);color:var(--acc)}.no{background:var(--riesgoBg);color:var(--riesgo)}.ya{background:var(--alertaBg);color:var(--alerta)}
+.sub{color:var(--sub);font-size:14px}
+b{font-weight:600}
+</style>
+</head>
+<body>
+<div class="card">
+  <p class="eyebrow">Tableros de China · lista Consmos</p>
+  <span id="chip" class="chip ya">…</span>
+  <h1 id="t">Un momento</h1>
+  <p id="m"></p>
+  <p class="sub" id="s"></p>
+</div>
+<script>
+(function(){
+  var q=new URLSearchParams(location.search), r=q.get("r")||"", label=q.get("label")||"", msg=q.get("msg")||"", estado=q.get("estado")||"";
+  var T={
+    publicada:{c:"ok",chip:"Publicada",t:"Lista China publicada",m:"La vigencia <b>"+esc(label)+"</b> ya es la actual. La app la toma en su siguiente publicación de ofertas (cada pocos minutos)."},
+    descartada:{c:"no",chip:"Descartada",t:"Borrador descartado",m:"Se borró la vigencia en borrador. La lista vigente no cambió. El archivo de Consmos sigue guardado."},
+    ya:{c:"ya",chip:"Ya atendida",t:"Esta lista ya fue atendida",m:"Está <b>"+esc(estado||"atendida")+"</b>"+(msg?" desde "+esc(msg)+" UTC":"")+". No se hizo nada."},
+    invalida:{c:"no",chip:"Liga no válida",t:"Liga no válida",m:"La liga no es válida o ya caducó. Pide una nueva desde la Matriz."},
+    nofound:{c:"no",chip:"No encontrada",t:"Esa lista no existe",m:"No hay una lista con ese identificador."},
+    error:{c:"no",chip:"Error",t:"No se pudo completar",m:esc(msg||"Error desconocido")+". Nada cambió."}
+  };
+  var x=T[r]||T.error;
+  document.getElementById("chip").className="chip "+x.c; document.getElementById("chip").textContent=x.chip;
+  document.getElementById("t").textContent=x.t; document.getElementById("m").innerHTML=x.m;
+  document.getElementById("s").textContent="Puedes cerrar esta pestaña.";
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+})();
+</script>
+</body>
+</html>
