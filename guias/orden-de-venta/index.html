@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Guía de la Academia NT: cómo crear una orden de venta desde el Inventario, del portal al asistente de NetSuite, en 10 pasos con pantallas.">
+<link rel="icon" href="../img/nt.png">
+<title>Orden de venta desde el Inventario</title>
+<style>
+/* Layout: una columna de lectura (≈760px) con pasos numerados; cada paso = pantalla real + tabla de campos. Dueto Tierra. */
+:root{
+  --bg:#F2EDE3;--card:#FBF8F1;--line:#E0D8C8;--ink:#3A3129;--sub:#71655A;--faint:#9C8F80;
+  --acc:#587F6B;--accInk:#F6FBF7;--acc2:#8A6F5B;--riesgo:#AE4E2B;--alerta:#9A6A12;--info:#3D6F9E;
+  --okBg:#E4EDE7;--alertaBg:#F5EBD6;--riesgoBg:#F6E3DA;--infoBg:#E4EDF6;
+  --shadow:0 1px 2px rgba(58,49,41,.05),0 10px 30px rgba(58,49,41,.07);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#1A1713;--card:#241F1A;--line:#3A322A;--ink:#F0EAE0;--sub:#BCAFA0;--faint:#8D8072;
+  --acc:#8FB89F;--accInk:#17241C;--acc2:#C9A87F;--riesgo:#E0785A;--alerta:#E0B463;--info:#7FA8D8;
+  --okBg:#1E2E24;--alertaBg:#33291A;--riesgoBg:#33211B;--infoBg:#1C2836;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 14px 34px rgba(0,0,0,.45);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1A1713;--card:#241F1A;--line:#3A322A;--ink:#F0EAE0;--sub:#BCAFA0;--faint:#8D8072;
+  --acc:#8FB89F;--accInk:#17241C;--acc2:#C9A87F;--riesgo:#E0785A;--alerta:#E0B463;--info:#7FA8D8;
+  --okBg:#1E2E24;--alertaBg:#33291A;--riesgoBg:#33211B;--infoBg:#1C2836;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 14px 34px rgba(0,0,0,.45);color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.58;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 60px}
+.wrap{max-width:820px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+header{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--acc2)}
+.regla{width:60px;height:3px;background:var(--acc2);border-radius:2px}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(28px,5vw,40px);line-height:1.15;letter-spacing:-.01em;margin:0;text-wrap:balance}
+h2{font-family:var(--serif);font-weight:500;font-size:24px;line-height:1.25;margin:0;text-wrap:balance}
+h3{font-size:15px;font-weight:600;margin:0}
+p{margin:0}
+.lead{color:var(--sub);font-size:16.5px;max-width:65ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:12.5px;padding:4px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--sub)}
+.tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.04em;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.t-ed{background:var(--okBg);color:var(--acc)}
+.t-ro{background:var(--line);color:var(--sub)}
+.t-ojo{background:var(--riesgoBg);color:var(--riesgo)}
+.leyenda{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--sub);align-items:center}
+.leyenda span{display:flex;align-items:center;gap:6px}
+.punto{width:16px;height:16px;border-radius:50%;display:inline-block}
+.antes{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+.antes ul,.paso ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.indice{display:flex;flex-wrap:wrap;gap:8px}
+.indice a{font-size:13px;color:var(--acc);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 11px;background:var(--card)}
+.indice a:hover,.indice a:focus-visible{border-color:var(--acc);outline:none}
+.fase{display:flex;align-items:center;gap:12px;padding-top:8px;border-top:1px solid var(--line)}
+.fase .eyebrow{color:var(--acc)}
+.paso{display:flex;flex-direction:column;gap:14px;scroll-margin-top:16px}
+.paso-h{display:flex;gap:14px;align-items:flex-start}
+.num{flex:none;width:34px;height:34px;border-radius:50%;background:var(--acc);color:var(--accInk);display:grid;place-items:center;font-weight:600;font-variant-numeric:tabular-nums}
+.paso-h div{min-width:0;display:flex;flex-direction:column;gap:4px}
+.paso-h p{color:var(--sub)}
+figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+figure .lienzo{overflow-x:auto;background:#fff}
+figure img{display:block;width:100%;height:auto;max-width:100%}
+figure.chica img{max-width:640px;margin:0 auto}
+figcaption{font-size:12.5px;color:var(--faint);padding:8px 14px;border-top:1px solid var(--line)}
+.tabla{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.n{width:34px}
+.bola{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:600;color:#fff}
+.b-s{background:#587F6B}.b-r{background:#AE4E2B}
+td.c{white-space:nowrap}
+.aviso{border-radius:12px;padding:12px 16px;font-size:14px;display:flex;flex-direction:column;gap:4px}
+.aviso b{font-weight:600}
+.a-r{background:var(--riesgoBg);color:var(--ink);border:1px solid var(--line)}
+.a-r b{color:var(--riesgo)}
+.a-i{background:var(--infoBg);border:1px solid var(--line)}
+.a-i b{color:var(--info)}
+.a-a{background:var(--alertaBg);border:1px solid var(--line)}
+.a-a b{color:var(--alerta)}
+.errores{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.err{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.err h3{color:var(--riesgo)}
+.err p{font-size:14px;color:var(--sub)}
+.quiz{display:flex;flex-direction:column;gap:14px}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.q button{font:inherit;font-size:14px;text-align:left;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.q button:hover{border-color:var(--acc)}
+.q button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.q button.bien{background:var(--okBg);border-color:var(--acc)}
+.q button.mal{background:var(--riesgoBg);border-color:var(--riesgo)}
+.q .exp{font-size:13.5px;color:var(--sub)}
+code,.mono{font-family:var(--mono);font-size:.9em}
+footer{font-size:12.5px;color:var(--faint);border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:520px){td.c{white-space:normal}.paso-h{gap:10px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.volver{display:inline-flex;align-items:center;gap:8px;color:var(--sub);text-decoration:none;font:600 13px/1 var(--sans);margin-bottom:18px}
+.volver img{width:22px;height:22px;border-radius:6px;background:#F7F5EC;padding:2px}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<a class="volver" href="../"><img src="../img/nt.png" alt="">Guías de la NT App</a>
+<header>
+  <div class="eyebrow">Guía 3 · Academia NT · Ventas</div>
+  <div class="regla"></div>
+  <h1>Cómo crear una orden de venta desde el Inventario</h1>
+  <p class="lead">Del portal «Inventario disponible» al asistente de órdenes de NetSuite, pantalla por pantalla. Las pantallas son reales. Los números sobre cada imagen te dicen qué puedes cambiar y qué tienes que revisar antes de crear la orden.</p>
+  <div class="chips"><span class="chip">10 pasos</span><span class="chip">≈ 6 minutos por orden</span><span class="chip">Portal Inventario → asistente de órdenes</span><span class="chip">Pantallas del 23-nov-2026</span></div>
+</header>
+
+<section class="antes">
+  <h2>Antes de empezar</h2>
+  <ul>
+    <li>Ten a la mano lo que <b>cotizaste y acordaste</b> con el cliente: producto, largos, paquetes, precio y <b>en qué moneda y unidad</b> (por MPT/MBF, por m³ o por pieza), incoterm, lugar y fecha de envío.</li>
+    <li>Una orden = <b>una sola empresa</b> (Natural Trade o Global Forest) y <b>una sola bodega</b>. Si el material está en dos bodegas, son dos órdenes.</li>
+    <li>Solo se vende lo <b>disponible</b>. Lo que está en <b>GF Tránsito Clientes</b> ya es de otro cliente: no se vende. Si una venta se cancela, Logística lo pasa primero a GF Tránsito Inventario.</li>
+    <li>El asistente <b>copia la entrega de la última orden del cliente</b>. Eso ahorra tiempo, pero es la causa número uno de errores: en el paso 8 la revisas campo por campo.</li>
+  </ul>
+  <div class="leyenda">
+    <span><i class="punto b-s"></i> Número verde: lo puedes usar o cambiar</span>
+    <span><i class="punto b-r"></i> Número rojo: revísalo siempre, aquí se cometen los errores</span>
+  </div>
+  <div class="leyenda">
+    <span><i class="tag t-ed">Editable</i> lo cambias tú</span>
+    <span><i class="tag t-ro">Solo lectura</i> lo pone el sistema</span>
+    <span><i class="tag t-ojo">Revisa</i> viene lleno, pero puede venir mal</span>
+  </div>
+</section>
+
+<nav class="indice" aria-label="Pasos">
+  <a href="#paso-1">1 · Encuentra</a><a href="#paso-2">2 · A la orden</a><a href="#paso-3">3 · Embarque</a><a href="#paso-4">4 · Tally</a><a href="#paso-5">5 · Cliente</a><a href="#paso-6">6 · Moneda</a><a href="#paso-7">7 · Precio</a><a href="#paso-8">8 · Entrega</a><a href="#paso-9">9 · Transporte</a><a href="#paso-10">10 · Confirma</a><a href="#errores">Errores comunes</a><a href="#quiz">Repaso</a>
+</nav>
+
+<div class="fase"><span class="eyebrow">Parte A · Portal Inventario disponible</span></div>
+
+<section class="paso" id="paso-1">
+  <div class="paso-h"><span class="num">1</span><div><h2>Encuentra el material</h2><p>Abre NetSuite → portal <b>Inventario disponible</b>. Cada renglón es un producto; los cuadros son los largos con sus paquetes.</p></div></div>
+  <figure><div class="lienzo"><img src="img/01-portal.jpg" alt="Portal Inventario disponible con filtros, bodegas, buscador y renglones de producto"></div><figcaption>Portal Inventario disponible · vista «Por largos»</figcaption></figure>
+  <div class="tabla"><table>
+    <tr><th></th><th>Qué es</th><th>Tipo</th><th>Qué cuidar</th></tr>
+    <tr><td class="n"><span class="bola b-s">1</span></td><td>Filtros: empresa, bodega, especie, comprador, responsable, volumen, antigüedad</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Si no ves algo, primero revisa que el filtro de <b>Empresa</b> y <b>Bodega</b> lo incluya.</td></tr>
+    <tr><td class="n"><span class="bola b-s">2</span></td><td>Bodegas con su número de paquetes</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Toca una para ver solo esa bodega. <b>GF Tránsito Clientes</b> no se vende.</td></tr>
+    <tr><td class="n"><span class="bola b-s">3</span></td><td>Buscador</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Acepta medida (<span class="mono">2x8 #3</span>, <span class="mono">86x137</span>), PO (<span class="mono">GF-48061</span>) o lote.</td></tr>
+    <tr><td class="n"><span class="bola b-s">4</span></td><td>Largos y paquetes disponibles (8′ a 22′, RL)</td><td class="c"><span class="tag t-ro">Solo lectura</span></td><td>Pasa el cursor por un largo para ver piezas por paquete. El color dice la antigüedad (verde 0–60 d, café 61–180 d, rojo +180 d).</td></tr>
+    <tr><td class="n"><span class="bola b-s">5</span></td><td>Precio de lista y su unidad (<span class="mono">/MPT</span>)</td><td class="c"><span class="tag t-ro">Referencia</span></td><td>Es el precio sugerido. El precio real lo escribes en el paso 7.</td></tr>
+    <tr><td class="n"><span class="bola b-r">6</span></td><td>Botón <b>«A la orden»</b></td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>Es el que agrega el material a la orden de venta. No lo confundas con <b>«+»</b>, que es para <i>cotizar</i> varios productos (hace un PDF, no una orden).</td></tr>
+  </table></div>
+  <div class="aviso a-i"><b>Lee la etiqueta del renglón.</b> «En tránsito · llega 25-nov» = viene en camino. «En patio desde… falta transfer» = Logística no ha hecho el traspaso. «Devolución GF-552» = material devuelto, en su propio renglón. Si dudas si ya se puede vender, pregunta a Logística antes de prometer fecha.</div>
+</section>
+
+<section class="paso" id="paso-2">
+  <div class="paso-h"><span class="num">2</span><div><h2>Agrégalo a la orden</h2><p>Toca <b>«A la orden»</b> en cada producto que vas a vender. Abajo aparece una barra oscura con lo que llevas.</p></div></div>
+  <figure><div class="lienzo"><img src="img/02-a-la-orden.jpg" loading="lazy" alt="Barra inferior con el embarque seleccionado y el botón Crear orden de venta"></div><figcaption>Barra de la orden: 1 embarque · Bodega Monterrey GF · 24 paq · ≈ 1.0 sencillo</figcaption></figure>
+  <div class="tabla"><table>
+    <tr><th></th><th>Qué es</th><th>Tipo</th><th>Qué cuidar</th></tr>
+    <tr><td class="n"><span class="bola b-r">1</span></td><td>«A la orden» del producto</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Vuelve a tocarlo para quitarlo. Puedes agregar varios productos <b>de la misma bodega</b>.</td></tr>
+    <tr><td class="n"><span class="bola b-s">2</span></td><td>Resumen: embarques, bodega, paquetes, volumen y camiones (sencillo/full)</td><td class="c"><span class="tag t-ro">Solo lectura</span></td><td>Úsalo para saber si llenas el camión que cotizaste.</td></tr>
+    <tr><td class="n"><span class="bola b-r">3</span></td><td><b>Crear orden de venta</b></td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>Abre el paso 4. Si en la barra dice «solo para transferir», es material de GF Tránsito Clientes: no se puede vender.</td></tr>
+    <tr><td class="n"><span class="bola b-s">4</span></td><td>Contador arriba «(1 selected)» y el mismo botón</td><td class="c"><span class="tag t-ro">Solo lectura</span></td><td>Es el mismo botón que el de la barra.</td></tr>
+  </table></div>
+</section>
+
+<section class="paso" id="paso-3">
+  <div class="paso-h"><span class="num">3</span><div><h2>Revisa de qué embarque sale</h2><p>Toca el nombre del producto para abrir el detalle. Ahí ves cada lote, su PO y su fecha de recepción.</p></div></div>
+  <figure><div class="lienzo"><img src="img/03-detalle-embarque.jpg" loading="lazy" alt="Detalle del embarque con lote, largo, paquetes, piezas por paquete y recepción"></div><figcaption>Detalle: PO GF-48061 · lote NT-2601431_96_26/10-2 · 24 paq de 10′ · 96 pzas/paq</figcaption></figure>
+  <div class="tabla"><table>
+    <tr><th></th><th>Qué es</th><th>Tipo</th><th>Qué cuidar</th></tr>
+    <tr><td class="n"><span class="bola b-s">1</span></td><td>«En la orden ✓»</td><td class="c"><span class="tag t-ro">Estado</span></td><td>Confirma que este embarque ya va en tu orden.</td></tr>
+    <tr><td class="n"><span class="bola b-s">2</span></td><td>Bodega y PO de compra</td><td class="c"><span class="tag t-ro">Solo lectura</span></td><td>La bodega aquí es la que va a salir en la orden. Comprueba que sea la que le dijiste al cliente.</td></tr>
+    <tr><td class="n"><span class="bola b-s">3</span></td><td>Lote, largo, paquetes, piezas por paquete, recepción</td><td class="c"><span class="tag t-ro">Solo lectura</span></td><td>Si las piezas por paquete no coinciden con lo que vio el cliente, avisa antes de vender.</td></tr>
+    <tr><td class="n"><span class="bola b-s">4</span></td><td>Comprador, responsable, precio, fecha, comentario y fotos</td><td class="c"><span class="tag t-ro">Consulta</span></td><td>Lee el <b>Comentario</b>: a veces dice si el material está apartado o tiene algún detalle.</td></tr>
+  </table></div>
+</section>
+
+<section class="paso" id="paso-4">
+  <div class="paso-h"><span class="num">4</span><div><h2>Escoge cuántos paquetes de cada largo</h2><p>La ventana <b>Crear orden de venta</b> arranca en 0. Tú escribes los paquetes por largo: este es el tally que se va a vender.</p></div></div>
+  <figure class="chica"><div class="lienzo"><img src="img/04-tally.jpg" loading="lazy" alt="Ventana Crear orden de venta con tally por largo"></div><figcaption>Ventana «Crear orden de venta» con «Todo» aplicado: 24 paq de 10′</figcaption></figure>
+  <div class="tabla"><table>
+    <tr><th></th><th>Qué es</th><th>Tipo</th><th>Qué cuidar</th></tr>
+    <tr><td class="n"><span class="bola b-s">1</span></td><td>Meta en sencillos + «Llenar con lo más viejo» / «Poner todo en 0»</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Si vendes «un camión», pon la meta y deja que llene con el material más antiguo primero.</td></tr>
+    <tr><td class="n"><span class="bola b-s">2</span></td><td>Cómo venían los contenedores (de la ICPO)</td><td class="c"><span class="tag t-ro">Solo lectura</span></td><td>Te dice si estás partiendo un contenedor. Úsalo para no dejar sobrantes sueltos.</td></tr>
+    <tr><td class="n"><span class="bola b-s">3</span></td><td>«Todo» / «Nada» por producto</td><td class="c"><span class="tag t-ed">Editable</span></td><td>«Todo» pone todo lo disponible del producto.</td></tr>
+    <tr><td class="n"><span class="bola b-r">4</span></td><td><b>Paq a la orden</b> por largo</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Escribe exactamente los paquetes acordados. No puede pasar de «Disponibles».</td></tr>
+    <tr><td class="n"><span class="bola b-s">5</span></td><td>Tally a la orden: paquetes, volumen y camiones</td><td class="c"><span class="tag t-ro">Solo lectura</span></td><td>Compáralo con tu cotización antes de seguir.</td></tr>
+    <tr><td class="n"><span class="bola b-r">6</span></td><td>«Continuar en el asistente de órdenes →»</td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>Abre una <b>pestaña nueva</b>. Si el navegador la bloquea, permite ventanas emergentes de NetSuite.</td></tr>
+  </table></div>
+  <div class="aviso a-r"><b>El sistema te detiene si…</b> mezclas bodegas («No se pueden mezclar bodegas en una misma orden de venta»), mezclas empresas, o incluyes material de GF Tránsito Clientes. No lo brinques: haz una orden por bodega o pide la transferencia a Logística.</div>
+</section>
+
+<div class="fase"><span class="eyebrow">Parte B · Asistente «Nueva orden de venta» (NetSuite)</span></div>
+
+<section class="paso" id="paso-5">
+  <div class="paso-h"><span class="num">5</span><div><h2>Elige al cliente</h2><p>El asistente llega con tus lotes ya cargados. A la derecha está el borrador con lo que falta para crear la orden.</p></div></div>
+  <figure><div class="lienzo"><img src="img/05-asistente-cliente.jpg" loading="lazy" alt="Asistente Nueva orden de venta: buscador de cliente, clientes recientes, lote y panel de borrador"></div><figcaption>Asistente «Nueva orden de venta» recién abierto</figcaption></figure>
+  <div class="tabla"><table>
+    <tr><th></th><th>Qué es</th><th>Tipo</th><th>Qué cuidar</th></tr>
+    <tr><td class="n"><span class="bola b-r">1</span></td><td>Buscar cliente</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Escribe el nombre y verifica la <b>razón social completa</b>. Hay razones sociales muy parecidas.</td></tr>
+    <tr><td class="n"><span class="bola b-s">2</span></td><td>Clientes recientes de la empresa</td><td class="c"><span class="tag t-ed">Atajo</span></td><td>Solo es un atajo. Que salga aquí no quiere decir que sea tu cliente.</td></tr>
+    <tr><td class="n"><span class="bola b-s">3</span></td><td>Paquetes «de 24»</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Viene con lo que pusiste en el paso 4. Aquí todavía lo puedes bajar.</td></tr>
+    <tr><td class="n"><span class="bola b-s">4</span></td><td>Piezas por paquete</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Viene del lote. <b>No lo cambies</b> salvo que Logística confirme que el físico es distinto: cambia el volumen y el importe.</td></tr>
+    <tr><td class="n"><span class="bola b-r">5</span></td><td>Precio y unidad</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Se llena en el paso 7, después de elegir al cliente y la moneda.</td></tr>
+    <tr><td class="n"><span class="bola b-s">6</span></td><td>«Falta para crearla»</td><td class="c"><span class="tag t-ro">Solo lectura</span></td><td>Lista viva de lo que falta. No puedes crear hasta que diga «Todo listo».</td></tr>
+  </table></div>
+  <div class="aviso a-i"><b>Botón «Agregar lotes» y la ×.</b> Puedes sumar otro lote o quitar uno aquí mismo, pero sigue la regla de una sola bodega. Para no equivocarte, mejor regresa al portal («← Volver al portal») y arma la selección desde ahí.</div>
+</section>
+
+<section class="paso" id="paso-6">
+  <div class="paso-h"><span class="num">6</span><div><h2>Revisa la moneda</h2><p>Al elegir al cliente, el asistente pone su moneda, términos y vendedor, y copia la entrega de su última orden.</p></div></div>
+  <figure><div class="lienzo"><img src="img/06-moneda.jpg" loading="lazy" alt="Cliente elegido con selector de moneda MXN y USD"></div><figcaption>Cliente elegido. En este caso el asistente propuso MXN; la cotización era en USD.</figcaption></figure>
+  <div class="tabla"><table>
+    <tr><th></th><th>Qué es</th><th>Tipo</th><th>Qué cuidar</th></tr>
+    <tr><td class="n"><span class="bola b-r">1</span></td><td><b>Moneda MXN / USD</b></td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>Tiene que ser la moneda en la que cotizaste. En la prueba, la tarjeta del cliente decía «USD · Última orden», pero el asistente marcó <b>MXN</b>. Cámbiala <b>antes</b> de poner el precio.</td></tr>
+    <tr><td class="n"><span class="bola b-s">2</span></td><td>«La entrega viene llena con su última orden, GF-64634»</td><td class="c"><span class="tag t-ro">Aviso</span></td><td>Te dice de qué orden se copió la entrega. La revisas en el paso 8.</td></tr>
+    <tr><td class="n"><span class="bola b-s">3</span></td><td>Cambiar cliente</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Si te equivocaste de cliente, cámbialo aquí. No sigas con el equivocado.</td></tr>
+  </table></div>
+</section>
+
+<section class="paso" id="paso-7">
+  <div class="paso-h"><span class="num">7</span><div><h2>Escribe el precio en la unidad en que lo cotizaste</h2><p>El importe se calcula con el volumen real del lote: precio × volumen.</p></div></div>
+  <figure><div class="lienzo"><img src="img/07-precio.jpg" loading="lazy" alt="Línea de lote con precio 449 USD por MBF e importe 13,793.28"></div><figcaption>449 USD por MBF × 30.72 MBF = 13,793.28 USD (sin IVA)</figcaption></figure>
+  <div class="tabla"><table>
+    <tr><th></th><th>Qué es</th><th>Tipo</th><th>Qué cuidar</th></tr>
+    <tr><td class="n"><span class="bola b-r">1</span></td><td>Precio + unidad (<b>por MBF</b>, por m³, por pieza)</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Si cotizaste por pieza, escoge «por pieza» y escribe el precio por pieza. Un precio por MPT con la unidad «por pieza» multiplica el importe por cientos. MBF = MPT (miles de pies tabla).</td></tr>
+    <tr><td class="n"><span class="bola b-s">2</span></td><td>Paquetes</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Lo mismo que en el paso 4.</td></tr>
+    <tr><td class="n"><span class="bola b-s">3</span></td><td>Importe del renglón</td><td class="c"><span class="tag t-ro">Solo lectura</span></td><td>Haz la cuenta rápida: ¿se parece a tu cotización?</td></tr>
+    <tr><td class="n"><span class="bola b-s">4</span></td><td>Piezas, MBF y m³ del lote</td><td class="c"><span class="tag t-ro">Solo lectura</span></td><td>Es el volumen real con el que se factura.</td></tr>
+  </table></div>
+  <div class="aviso a-a"><b>Precio sin IVA.</b> El panel de la derecha suma el IVA 16 % aproximado solo como referencia. Escribe siempre el precio antes de IVA.</div>
+</section>
+
+<section class="paso" id="paso-8">
+  <div class="paso-h"><span class="num">8</span><div><h2>Revisa la entrega y el incoterm, campo por campo</h2><p>Todo viene copiado de la <b>última orden del cliente</b>, no de esta venta. Abre cada bloque y confírmalo.</p></div></div>
+  <figure><div class="lienzo"><img src="img/08-entrega-incoterm.jpg" loading="lazy" alt="Bloques Cuándo y a dónde e Incoterm y flete"></div><figcaption>Ejemplo real: la entrega y el incoterm vienen de una venta anterior por Progreso; el material de esta orden está en Bodega Monterrey.</figcaption></figure>
+  <div class="tabla"><table>
+    <tr><th></th><th>Campo</th><th>Tipo</th><th>Qué cuidar</th></tr>
+    <tr><td class="n"><span class="bola b-r">1</span></td><td>Fecha requerida de envío *</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Siempre viene vacía. Usa los atajos (Este viernes, El lunes que viene, En dos semanas) o escribe la que prometiste.</td></tr>
+    <tr><td class="n"><span class="bola b-s">2</span></td><td>Estado destino * y Dirección de envío</td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>La dirección es la «default» del cliente. Si esta carga va a otra planta, cámbiala.</td></tr>
+    <tr><td class="n"><span class="bola b-s">3</span></td><td>Instrucciones de entrega *</td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>Aquí venía «entrega junto con las otras ordenes mañana martes por la mañana», el texto de otra venta. <b>Bórralo y escribe el de esta orden.</b> Logística lo lee tal cual.</td></tr>
+    <tr><td class="n"><span class="bola b-r">4</span></td><td>Incoterm * y Lugar del incoterm *</td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>Venía <b>FCA · Progreso, Yuc</b> y este material sale de Monterrey. Pon el incoterm y la ciudad que cotizaste (por ejemplo FCA Monterrey o DAP + ciudad del cliente).</td></tr>
+    <tr><td class="n"><span class="bola b-r">5</span></td><td>Quién paga el flete *</td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>Tiene que cuadrar con el incoterm: si vendiste entregado (DAP), el flete lo pagamos nosotros.</td></tr>
+    <tr><td class="n"><span class="bola b-s">6</span></td><td>Quién carga y descarga *</td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>Confírmalo con lo acordado.</td></tr>
+  </table></div>
+  <div class="aviso a-r"><b>Por qué importa:</b> con el incoterm y el lugar copiados de otra venta, Logística programa el flete equivocado y la factura sale con condiciones que no acordaste. «Completo» en verde solo dice que el campo tiene algo escrito, no que esté bien.</div>
+</section>
+
+<section class="paso" id="paso-9">
+  <div class="paso-h"><span class="num">9</span><div><h2>Transporte y datos comerciales</h2><p>Los dos últimos bloques también vienen de la orden anterior.</p></div></div>
+  <figure><div class="lienzo"><img src="img/09-transporte-comercial.jpg" loading="lazy" alt="Bloques Transporte y Datos comerciales"></div><figcaption>Ejemplo real: puerto «Puerto Progreso» y origen «China» copiados de otra orden, en una venta de Yellow Pine desde Monterrey.</figcaption></figure>
+  <div class="tabla"><table>
+    <tr><th></th><th>Campo</th><th>Tipo</th><th>Qué cuidar</th></tr>
+    <tr><td class="n"><span class="bola b-r">1</span></td><td>Medio de envío * (Ocean / Ground / Air Freight)</td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>Desde una bodega en México casi siempre es Ground (camión).</td></tr>
+    <tr><td class="n"><span class="bola b-r">2</span></td><td>Tipo de transporte * y Frontera o puerto de entrada *</td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>Venía «To Ramp · Puerto Progreso». Para material que ya está en bodega, el puerto de la venta anterior no aplica: corrígelo o pregunta a Logística qué va.</td></tr>
+    <tr><td class="n"><span class="bola b-s">3</span></td><td>Single / Full y Decon / Consolidated</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Pon el camión que cotizaste (sencillo o full).</td></tr>
+    <tr><td class="n"><span class="bola b-s">4</span></td><td>Tipo de orden * (Inventory / Direct / Speculation)</td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>Si vendes material del inventario, aquí viene <b>Inventory</b>. No lo cambies sin preguntar: de esto depende la comisión.</td></tr>
+    <tr><td class="n"><span class="bola b-s">5</span></td><td>Tipo de comisión * y Vendedor</td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>El vendedor viene del cliente. Si la venta es tuya y sale otro nombre, avisa a tu líder; no lo cambies por tu cuenta.</td></tr>
+    <tr><td class="n"><span class="bola b-r">6</span></td><td>Origen del producto</td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>Venía «China» en una venta de Yellow Pine (pino amarillo del sur de EE. UU.). Tiene que ser el origen <b>del material de esta orden</b>.</td></tr>
+    <tr><td class="n"><span class="bola b-s">7</span></td><td>Términos de pago, fecha, departamento y notas internas</td><td class="c"><span class="tag t-ed">Editable</span></td><td>Los términos vienen del cliente («Los del cliente»). Las notas internas solo las ve el equipo.</td></tr>
+  </table></div>
+</section>
+
+<section class="paso" id="paso-10">
+  <div class="paso-h"><span class="num">10</span><div><h2>Revisa el resumen y crea la orden</h2><p>Cuando el panel diga «Todo listo», toca <b>Revisar y crear</b>. Se abre «Confirma la orden» y todavía no se crea nada.</p></div></div>
+  <figure class="chica"><div class="lienzo"><img src="img/10-confirma.jpg" loading="lazy" alt="Ventana Confirma la orden con el resumen completo"></div><figcaption>«Confirma la orden»: la última revisión antes de que exista en NetSuite</figcaption></figure>
+  <div class="tabla"><table>
+    <tr><th></th><th>Qué revisar</th><th>Tipo</th><th>Qué cuidar</th></tr>
+    <tr><td class="n"><span class="bola b-s">1</span></td><td>Cliente, fecha, <b>moneda</b> y términos</td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>Una última vez: cliente correcto y moneda correcta.</td></tr>
+    <tr><td class="n"><span class="bola b-r">2</span></td><td>Envío, destino, entrega, incoterm, flete, transporte, contenedor y comercial</td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>Léelo como si fueras Logística: ¿con esto sabrías qué camión mandar, a dónde y cuándo?</td></tr>
+    <tr><td class="n"><span class="bola b-s">3</span></td><td>Lote, paquetes, piezas, volumen, precio e importe; «Ver cálculo»</td><td class="c"><span class="tag t-ojo">Revisa</span></td><td>«Ver cálculo» muestra cómo salió el importe. Total = subtotal + IVA 16 %.</td></tr>
+    <tr><td class="n"><span class="bola b-s">4</span></td><td><b>Seguir editando</b></td><td class="c"><span class="tag t-ed">Seguro</span></td><td>Regresa al formulario sin crear nada.</td></tr>
+    <tr><td class="n"><span class="bola b-r">5</span></td><td><b>Crear orden de venta</b></td><td class="c"><span class="tag t-ojo">Definitivo</span></td><td>Crea la orden en NetSuite y aparta el material. Tócalo <b>una sola vez</b> y espera.</td></tr>
+  </table></div>
+  <div class="aviso a-r"><b>Si ya la creaste y algo quedó mal:</b> no crees otra orden «buena» encima, porque el material queda apartado dos veces. Avisa a tu líder o a Logística con el número de la orden (GF-…) para corregirla.</div>
+</section>
+
+<section class="paso" id="errores">
+  <div class="fase"><span class="eyebrow">Los errores que más vemos</span></div>
+  <div class="errores">
+    <div class="err"><h3>Entrega copiada</h3><p>Incoterm, lugar, puerto e instrucciones de otra venta. Revisa el paso 8 completo, aunque todo diga «Completo».</p></div>
+    <div class="err"><h3>Moneda equivocada</h3><p>Precio en dólares capturado en una orden en pesos, o al revés. Cambia la moneda antes del precio (paso 6).</p></div>
+    <div class="err"><h3>Unidad equivocada</h3><p>Precio por MPT con la unidad «por pieza» o «por m³». El importe se dispara o se desploma (paso 7).</p></div>
+    <div class="err"><h3>Cliente parecido</h3><p>Razones sociales casi iguales. Lee el nombre completo y los términos (paso 5).</p></div>
+    <div class="err"><h3>Material ajeno</h3><p>GF Tránsito Clientes ya es de otro cliente. Si una venta se cancela, primero va la transferencia a GF Tránsito Inventario.</p></div>
+    <div class="err"><h3>Orden duplicada</h3><p>Tocar «Crear» dos veces o crear una nueva para «corregir». Una orden, un toque; los errores se corrigen sobre la misma orden.</p></div>
+  </div>
+</section>
+
+<section class="paso" id="quiz">
+  <div class="fase"><span class="eyebrow">Repaso · 5 preguntas</span></div>
+  <div class="quiz" id="quizBox"></div>
+</section>
+
+<footer>Natural Trade · Global Forest · Guía hecha con pantallas reales del portal Inventario disponible y del asistente de órdenes (23-nov-2026). Los nombres de clientes, direcciones, personas y precios de otros productos están tapados. En el ejemplo se llenó el borrador y se abrió «Confirma la orden» sin crear la orden. Si una pantalla cambia, avisa para actualizar la guía.</footer>
+</div>
+
+<script>
+(function(){
+  var Q=[
+    ['¿Qué botón agrega el material a la orden de venta?',['«+»','«A la orden»','«Cotizar»'],1,'«+» es para Cotizar selección (un PDF). «A la orden» arma la orden de venta.'],
+    ['El material está en Bodega Monterrey GF y en GF Tránsito Inventario. ¿Cuántas órdenes haces?',['Una','Dos, una por bodega','Ninguna, hay que transferir'],1,'Una orden lleva una sola bodega. El sistema no deja mezclarlas.'],
+    ['El asistente llenó la entrega con «FCA · Progreso, Yuc» y vendiste DAP a Guadalajara. ¿Qué haces?',['Lo dejo, dice «Completo»','Corrijo incoterm, lugar, quién paga el flete y transporte','Creo la orden y aviso después'],1,'La entrega viene de la última orden del cliente. «Completo» solo dice que hay algo escrito.'],
+    ['Cotizaste 449 USD por MPT. ¿Cómo lo capturas?',['449 · por MBF, con la moneda en USD','449 · por pieza','449 en MXN'],0,'MBF = MPT. Moneda y unidad tienen que ser las de la cotización.'],
+    ['Creaste la orden y el precio quedó mal. ¿Qué haces?',['Creo otra orden con el precio bueno','Aviso con el número GF-… para corregirla','La cancelo yo y vuelvo a empezar'],1,'Una orden nueva aparta el material dos veces. Se corrige la misma.']
+  ];
+  var box=document.getElementById('quizBox');
+  Q.forEach(function(q,i){
+    var d=document.createElement('div');d.className='q';
+    var h=document.createElement('h3');h.textContent=(i+1)+'. '+q[0];d.appendChild(h);
+    var exp=document.createElement('p');exp.className='exp';exp.hidden=true;exp.textContent=q[3];
+    q[1].forEach(function(o,j){
+      var b=document.createElement('button');b.type='button';b.id='q'+i+'o'+j;b.textContent=o;
+      b.addEventListener('click',function(){
+        d.querySelectorAll('button').forEach(function(x){x.classList.remove('bien','mal')});
+        b.classList.add(j===q[2]?'bien':'mal');
+        if(j!==q[2]) d.querySelectorAll('button')[q[2]].classList.add('bien');
+        exp.hidden=false;
+      });
+      d.appendChild(b);
+    });
+    d.appendChild(exp);box.appendChild(d);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 {
-  "actualizado": "2026-11-16",
+  "actualizado": "2026-11-23",
   "guias": [
     {
       "id": "activar-ofertas",
@@ -18,6 +18,15 @@
       "para": "trader",
       "minutos": 4,
       "publicada": "2026-11-16"
+    },
+    {
+      "id": "orden-de-venta",
+      "titulo": "Crea una orden de venta desde el Inventario",
+      "resumen": "Del portal Inventario disponible al asistente de NetSuite en 10 pasos con pantallas, y lo que tienes que revisar antes de crearla.",
+      "url": "https://natural-trade-ltd.github.io/nt-app-mockups/guias/orden-de-venta/",
+      "para": "trader",
+      "minutos": 6,
+      "publicada": "2026-11-23"
     }
   ]
 }
